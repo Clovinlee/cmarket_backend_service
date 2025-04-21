@@ -18,6 +18,8 @@ public interface ProductRepository extends JpaRepository<ProductModel, Long>, Jp
     // Underhood, this uses WHERE NAME like %name%
     Optional<ProductModel> findFirstByNameContaining(String name);
 
+    Optional<ProductModel> findBySlug(String slug);
+
     @Query("SELECT p FROM ProductModel p " +
             "WHERE p.price > :minPrice AND p.price < :maxPrice " +
             "AND p.rarity = :rarity " +

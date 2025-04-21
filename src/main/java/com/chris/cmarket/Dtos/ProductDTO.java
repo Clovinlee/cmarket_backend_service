@@ -21,6 +21,7 @@ import lombok.ToString;
 public class ProductDTO {
     private Long id;
     private String name;
+    private String slug;
     private String description;
     private BigDecimal price;
     private Optional<RarityDTO> rarity;
