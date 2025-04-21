@@ -29,6 +29,7 @@ public class ProductModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String slug;
     private String description;
 
     @Column(name = "id_rarity", updatable = false, insertable = false)
