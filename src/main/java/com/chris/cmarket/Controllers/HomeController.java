@@ -4,7 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 
 import com.chris.cmarket.Dtos.ProductDTO;
@@ -21,7 +25,7 @@ public class HomeController {
 
     private ProductService productService;
 
-    @GetMapping("")
+    @GetMapping("/")
     public ResponseEntity<APIResponse<?>> getProducts(
             @Valid @ModelAttribute GetProductRequest request,
             BindingResult bindingResult) {
@@ -40,4 +44,17 @@ public class HomeController {
 
         return ResponseEntity.ok(APIResponse.success(products));
     }
+
+    @GetMapping("{slug}")
+    public ResponseEntity<APIResponse<?>> getProductBySlug(@PathVariable String slug) {
+        Optional<ProductDTO> productSlug = productService.getProductBySlug(slug);
+
+        if (!productSlug.isPresent()) {
+            return ResponseEntity.status(404).body(APIResponse.notFound());
+        }
+
+        return ResponseEntity.ok(APIResponse.success(productSlug.get()));
+
+    }
+
 }
