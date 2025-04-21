@@ -17,6 +17,11 @@ public class GetProductRequest {
     private Integer page = 1;
     private Integer size = 10;
 
+    /**
+     * Converts the 1-based page number to 0-based for use with Pageable.
+     *
+     * @return the zero-based page index
+     */
     public Integer getZeroBasedPage() {
         return this.page - 1;
     }

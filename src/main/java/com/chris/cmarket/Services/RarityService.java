@@ -13,6 +13,11 @@ public class RarityService {
 
     private RarityRepository rarityRepository;
 
+    /**
+     * Retrieves all rarity records from the database.
+     *
+     * @return a list of {@link RarityDTO} representing all rarities
+     */
     public List<RarityDTO> getAllRarities() {
         List<RarityModel> rarities = rarityRepository.findAll();
 

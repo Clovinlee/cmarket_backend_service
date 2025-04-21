@@ -5,11 +5,24 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Fetch;
 
+/**
+ * Utility class for building JPA specifications that eagerly fetch related
+ * entities.
+ */
 public class WithRelationSpecification {
 
+    /**
+     * Creates a specification to fetch one or more related entities using LEFT
+     * JOINs.
+     * Skips fetching when the query is a count query (e.g., for pagination).
+     *
+     * @param relations the paths of related entities to fetch (e.g., "rarity",
+     *                  "productMerchants")
+     * @param <T>       the root entity type
+     * @return a JPA Specification that fetches the specified relations
+     */
     public static <T> Specification<T> fetch(String... relations) {
         return (root, query, cb) -> {
-            // Avoid load relation on count query (e.g pagination count)
             if (query.getResultType() != Long.class) {
                 for (String relationPath : relations) {
                     fetchPath(root, relationPath);
@@ -19,16 +32,21 @@ public class WithRelationSpecification {
         };
     }
 
+    /**
+     * Recursively fetches nested relations using LEFT JOINs.
+     *
+     * @param root the root entity in the criteria query
+     * @param path dot-separated path to the related entity (e.g.,
+     *             "product.category")
+     * @param <T>  the root entity type
+     */
     private static <T> void fetchPath(Root<T> root, String path) {
         String[] parts = path.split("\\.");
         Fetch<?, ?> fetch = null;
-        // Start from root
         for (String part : parts) {
-            if (fetch == null) {
-                fetch = root.fetch(part, JoinType.LEFT);
-            } else {
-                fetch = fetch.fetch(part, JoinType.LEFT);
-            }
+            fetch = (fetch == null)
+                    ? root.fetch(part, JoinType.LEFT)
+                    : fetch.fetch(part, JoinType.LEFT);
         }
     }
 }
