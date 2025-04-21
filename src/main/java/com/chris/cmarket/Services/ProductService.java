@@ -1,6 +1,8 @@
 package com.chris.cmarket.Services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,26 @@ public class ProductService {
 
     private ProductRepository productRepository;
 
+    /**
+     * Retrieves a product by its slug.
+     *
+     * @param slug the unique identifier for the product.
+     * @return an {@link Optional} containing the {@link ProductDTO} if found,
+     *         otherwise empty.
+     */
+    public Optional<ProductDTO> getProductBySlug(String slug) {
+        Optional<ProductModel> optProductModel = productRepository.findBySlug(slug);
+
+        return optProductModel.map(productModel -> new ProductDTO(productModel));
+    }
+
+    /**
+     * Retrieves a page of products based on the provided search parameters.
+     *
+     * @param param the request parameters containing the filter criteria.
+     * @return a {@link Page} of {@link ProductDTO} containing the filtered
+     *         products.
+     */
     public Page<ProductDTO> getProducts(GetProductRequest param) {
         int page = param.getZeroBasedPage();
         int size = param.getSize();
