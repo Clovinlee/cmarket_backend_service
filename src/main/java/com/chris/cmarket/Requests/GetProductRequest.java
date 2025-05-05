@@ -1,5 +1,7 @@
 package com.chris.cmarket.Requests;
 
+import java.util.List;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -13,7 +15,7 @@ public class GetProductRequest {
     @Positive
     @Nullable
     private Long rarity;
-    private Integer merchant;
+    private List<Long> merchants;
     private Integer page = 1;
     private Integer size = 10;
 

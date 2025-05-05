@@ -17,6 +17,7 @@ import com.chris.cmarket.Requests.GetProductRequest;
 import com.chris.cmarket.Specifications.Globals.NameSpecification;
 import com.chris.cmarket.Specifications.Globals.PriceSpecification;
 import com.chris.cmarket.Specifications.Globals.WithRelationSpecification;
+import com.chris.cmarket.Specifications.Products.ProductSpecification;
 import com.chris.cmarket.Specifications.Rarities.RarityIdSpecification;
 import com.chris.cmarket.Utils.SpecificationBuilder;
 
@@ -60,8 +61,8 @@ public class ProductService {
                 .addCriteria(PriceSpecification.withMin(param.getMinPrice()))
                 .addCriteria(NameSpecification.nameLike(param.getName()))
                 .addCriteria(RarityIdSpecification.whereId(param.getRarity()))
-                .addCriteria(WithRelationSpecification.fetch("rarity"))
-                .addCriteria(WithRelationSpecification.fetch("productMerchants"));
+                .addCriteria(ProductSpecification.hasMerchant(param.getMerchants()))
+                .addCriteria(WithRelationSpecification.fetch("rarity", "productMerchants"));
 
         Page<ProductModel> resultPage = productRepository.findAll(builder.build(), pageable);
 
