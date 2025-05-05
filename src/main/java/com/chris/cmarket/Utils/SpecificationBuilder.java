@@ -27,6 +27,22 @@ public class SpecificationBuilder<T> {
     }
 
     /**
+     * Adds a new {@link Specification} criteria to the current builder using OR
+     * logic.
+     * If the given specification is {@code null}, it will be ignored.
+     *
+     * @param spec the specification to add
+     * @return the current builder instance for chaining
+     */
+    public SpecificationBuilder<T> addOrCriteria(Specification<T> spec) {
+        if (spec != null) {
+            this.spec = this.spec.or(spec);
+        }
+
+        return this;
+    }
+
+    /**
      * Builds the final {@link Specification} composed of all added criteria.
      *
      * @return the combined specification
