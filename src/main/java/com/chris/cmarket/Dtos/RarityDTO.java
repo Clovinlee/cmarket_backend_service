@@ -3,10 +3,12 @@ package com.chris.cmarket.Dtos;
 import com.chris.cmarket.Models.RarityModel;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class RarityDTO {
     private Long id;
     private String name;

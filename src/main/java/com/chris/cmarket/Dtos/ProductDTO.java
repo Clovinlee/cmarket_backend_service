@@ -13,15 +13,18 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @JsonInclude(Include.NON_ABSENT)
 public class ProductDTO {
     private Long id;
     private String name;
     private String slug;
+    private String image;
     private String description;
     private BigDecimal price;
     private Optional<RarityDTO> rarity;
@@ -33,6 +36,7 @@ public class ProductDTO {
     public ProductDTO(ProductModel product) {
         this.id = product.getId();
         this.name = product.getName();
+        this.image = product.getImage();
         this.description = product.getDescription();
         this.price = product.getPrice();
         this.rarity = Optional.empty();

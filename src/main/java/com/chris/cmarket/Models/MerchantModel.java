@@ -1,5 +1,6 @@
 package com.chris.cmarket.Models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,11 +15,14 @@ public class MerchantModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private Integer id;
+    private Long id;
 
     private String name;
-    private Integer level;
+    private Long level;
     private String color;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "merchant", fetch = FetchType.LAZY)
     private List<ProductMerchantModel> productMerchants;
