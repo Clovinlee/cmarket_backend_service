@@ -4,21 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.chris.cmarket.Dtos.MerchantDTO;
 import com.chris.cmarket.Dtos.ProductDTO;
 import com.chris.cmarket.Requests.GetProductRequest;
 import com.chris.cmarket.Responses.APIResponse;
@@ -48,7 +50,7 @@ public class ProductAPITest {
         assertEquals(10, data.getTotalElements());
     }
 
-    @Test
+    @ParameterizedTest
     @MethodSource("getProductPaginationWithFilterProvider")
     void shouldGetProductsPaginationWithFilters(GetProductRequest getRequest) {
         ResponseEntity<APIResponse<CustomPageImpl<ProductDTO>>> response = restTemplate.exchange(
@@ -62,20 +64,29 @@ public class ProductAPITest {
 
         List<ProductDTO> responseProducts = response.getBody().getData().getContent();
         for (ProductDTO product : responseProducts) {
-            if (getRequest.getName() != null) {
+            if (null != getRequest.getName()) {
                 assertTrue(product.getName().toLowerCase().contains(getRequest.getName().toLowerCase()));
             }
-            if (getRequest.getMinPrice() != null) {
+            if (null != getRequest.getMinPrice()) {
                 assertTrue(product.getPrice().compareTo(getRequest.getMinPrice()) >= 0);
             }
-            if (getRequest.getMaxPrice() != null) {
+            if (null != getRequest.getMaxPrice()) {
                 assertTrue(product.getPrice().compareTo(getRequest.getMaxPrice()) <= 0);
             }
-            if (getRequest.getRarity() != null) {
+            if (null != getRequest.getRarity()) {
                 assertEquals(getRequest.getRarity(), product.getIdRarity());
             }
-            if (getRequest.getMerchant() != null) {
-                // assertEquals(getRequest.getMerchant(), product.getMerchantId());
+            if (null != getRequest.getMerchants()) {
+                List<Long> productMerchantIds = product.getMerchants()
+                        .stream()
+                        .map(MerchantDTO::getLevel)
+                        .collect(Collectors.toList());
+
+                boolean hasAtLeastOne = getRequest.getMerchants()
+                        .stream()
+                        .anyMatch(productMerchantIds::contains);
+
+                assertTrue(hasAtLeastOne);
             }
         }
     }
@@ -92,6 +103,6 @@ public class ProductAPITest {
                 GetProductRequest.builder().name("ring").minPrice(new BigDecimal(100)).build(),
                 GetProductRequest.builder().name("ring").maxPrice(new BigDecimal(100)).build(),
                 GetProductRequest.builder().rarity(4L).build(),
-                GetProductRequest.builder().merchant(2L).build());
+                GetProductRequest.builder().merchants(Arrays.asList(2L, 3L)).build());
     }
 }
