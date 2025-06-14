@@ -58,7 +58,6 @@ public class APIResponse<T> {
     public static <T> APIResponse<T> failed(T data) {
         return APIResponse.<T>builder()
                 .success(false)
-                .message("Something went wrong")
                 .data(data)
                 .build();
     }
