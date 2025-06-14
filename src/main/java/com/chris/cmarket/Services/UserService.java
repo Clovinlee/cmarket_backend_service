@@ -2,9 +2,6 @@ package com.chris.cmarket.Services;
 
 import java.util.Optional;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.chris.cmarket.Dtos.Requests.CreateUserDTO;
@@ -14,7 +11,7 @@ import com.chris.cmarket.Models.UserModel;
 import com.chris.cmarket.Repositories.UserRepository;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private UserRepository userRepository;
 
@@ -38,7 +35,8 @@ public class UserService implements UserDetailsService {
 
         String encodedPassword = this.passwordService.encodePassword(userDTO.getPassword());
 
-        UserModel user = new UserModel(userDTO.getName(), userDTO.getEmail(), encodedPassword);
+        UserModel user = new UserModel(userDTO.getName(), userDTO.getEmail(),
+                encodedPassword);
 
         return userRepository.save(user);
     }
@@ -65,10 +63,4 @@ public class UserService implements UserDetailsService {
     public Optional<UserModel> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.findOrFailByEmail(username);
-    }
-
 }
