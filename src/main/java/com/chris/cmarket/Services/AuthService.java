@@ -1,12 +1,11 @@
 package com.chris.cmarket.Services;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.chris.cmarket.Dtos.Responses.AuthTokenResponse;
+import com.chris.cmarket.Dtos.UserDTO;
+import com.chris.cmarket.Dtos.Requests.LoginUserDTO;
 import com.chris.cmarket.Models.UserModel;
 
 @Service
@@ -18,13 +17,9 @@ public class AuthService {
 
     PasswordService passwordService;
 
-    JwtService jwtService;
-
     public AuthService(
-            JwtService jwtService,
             UserService userService,
             PasswordService passwordService) {
-        this.jwtService = jwtService;
         this.userService = userService;
         this.passwordService = passwordService;
     }
@@ -36,18 +31,13 @@ public class AuthService {
      * @param password
      * @return
      */
-    public AuthTokenResponse login(String email, String password) {
-        UserModel user = userService.findOrFailByEmail(email);
+    public UserDTO login(LoginUserDTO loginUserDTO) {
+        UserModel userModel = userService.findOrFailByEmail(loginUserDTO.getEmail());
 
-        if (!passwordService.matches(password, user.getPassword())) {
+        if (!passwordService.matches(loginUserDTO.getPassword(), userModel.getPassword())) {
             throw new BadCredentialsException("Invalid Credentials");
         }
 
-        String accessToken = jwtService.generateJwtToken(user);
-        String refreshToken = jwtService.generateJwtRefreshToken(user);
-
-        return new AuthTokenResponse(accessToken, refreshToken, LocalDateTime.now()
-                .plusSeconds(jwtService.getExpiryTimeSeconds()));
+        return new UserDTO(userModel);
     }
-
 }
