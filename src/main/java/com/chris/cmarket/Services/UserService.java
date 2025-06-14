@@ -12,7 +12,6 @@ import com.chris.cmarket.Repositories.UserRepository;
 
 @Service
 public class UserService {
-
     private UserRepository userRepository;
 
     private PasswordService passwordService;
@@ -30,7 +29,7 @@ public class UserService {
      */
     public UserModel createUser(CreateUserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new EmailAlreadyExistException("Email already exists");
+            throw new EmailAlreadyExistException(userDTO.getEmail());
         }
 
         String encodedPassword = this.passwordService.encodePassword(userDTO.getPassword());
