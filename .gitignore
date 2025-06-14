@@ -7,6 +7,7 @@ build/
 app.log
 app.log*
 application.properties
+*.p12
 
 ### STS ###
 .apt_generated
