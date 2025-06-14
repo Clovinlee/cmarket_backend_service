@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
 public class LanguageConfig {
@@ -23,6 +24,14 @@ public class LanguageConfig {
         return resolver;
     }
 
+    @Bean
+    LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+
+        return lci;
+    }
+
     /**
      * Already declared in application.properties
      * spring.messages.basename=languages/messages
@@ -33,7 +42,7 @@ public class LanguageConfig {
     // MessageSource messageSource() {
     // ReloadableResourceBundleMessageSource messageSource = new
     // ReloadableResourceBundleMessageSource();
-    // messageSource.setBasename("classpath:languages/messages");
+    // messageSource.setBasenames("languages/messages");
     // messageSource.setDefaultEncoding("UTF-8");
 
     // return messageSource;
