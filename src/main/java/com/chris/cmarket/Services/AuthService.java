@@ -35,7 +35,7 @@ public class AuthService {
         UserModel userModel = userService.findOrFailByEmail(loginUserDTO.getEmail());
 
         if (!passwordService.matches(loginUserDTO.getPassword(), userModel.getPassword())) {
-            throw new BadCredentialsException("Invalid Credentials");
+            throw new BadCredentialsException("Bad Credentials");
         }
 
         return new UserDTO(userModel);
