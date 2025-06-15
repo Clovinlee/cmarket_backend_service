@@ -9,7 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.chris.cmarket.Constants.CmarketLoadOrderConstant;
+import com.chris.cmarket.Common.Constant.CmarketLoadOrderConstant;
 
 @Configuration
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
