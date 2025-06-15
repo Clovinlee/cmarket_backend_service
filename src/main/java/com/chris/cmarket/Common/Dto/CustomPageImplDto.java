@@ -1,4 +1,4 @@
-package com.chris.cmarket.Utils;
+package com.chris.cmarket.Common.Dto;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
-public class CustomPageImpl<T> {
+public class CustomPageImplDto<T> {
     protected List<T> content;
     protected int totalElements;
 }

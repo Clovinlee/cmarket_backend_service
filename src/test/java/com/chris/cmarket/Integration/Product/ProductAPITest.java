@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -20,12 +19,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.chris.cmarket.Common.Dto.CustomPageImplDto;
 import com.chris.cmarket.Common.Response.APIResponse;
 import com.chris.cmarket.Merchant.Dto.MerchantDTO;
 import com.chris.cmarket.Product.Dto.ProductDTO;
 import com.chris.cmarket.Product.Request.GetProductRequest;
-import com.chris.cmarket.Utils.CustomPageImpl;
-import com.chris.cmarket.Utils.LoggerGetter;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductAPITest {
@@ -33,31 +31,29 @@ public class ProductAPITest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    public static Logger logger = LoggerGetter.getLogger(ProductAPITest.class);
-
     @Test
     void shouldGetProductsPagination() {
-        ResponseEntity<APIResponse<CustomPageImpl<ProductDTO>>> response = restTemplate.exchange(
+        ResponseEntity<APIResponse<CustomPageImplDto<ProductDTO>>> response = restTemplate.exchange(
                 "/products",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<APIResponse<CustomPageImpl<ProductDTO>>>() {
+                new ParameterizedTypeReference<APIResponse<CustomPageImplDto<ProductDTO>>>() {
                 });
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        CustomPageImpl<ProductDTO> data = response.getBody().getData();
+        CustomPageImplDto<ProductDTO> data = response.getBody().getData();
         assertEquals(10, data.getTotalElements());
     }
 
     @ParameterizedTest
     @MethodSource("getProductPaginationWithFilterProvider")
     void shouldGetProductsPaginationWithFilters(GetProductRequest getRequest) {
-        ResponseEntity<APIResponse<CustomPageImpl<ProductDTO>>> response = restTemplate.exchange(
+        ResponseEntity<APIResponse<CustomPageImplDto<ProductDTO>>> response = restTemplate.exchange(
                 "/products" + getRequest.toQueryParam(),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<APIResponse<CustomPageImpl<ProductDTO>>>() {
+                new ParameterizedTypeReference<APIResponse<CustomPageImplDto<ProductDTO>>>() {
                 });
 
         assertEquals(HttpStatus.OK, response.getStatusCode());

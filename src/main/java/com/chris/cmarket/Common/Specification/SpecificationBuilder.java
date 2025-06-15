@@ -1,4 +1,4 @@
-package com.chris.cmarket.Utils;
+package com.chris.cmarket.Common.Specification;
 
 import org.springframework.data.jpa.domain.Specification;
 

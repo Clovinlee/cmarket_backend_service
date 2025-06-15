@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.chris.cmarket.Common.Specification.NameSpecification;
 import com.chris.cmarket.Common.Specification.PriceSpecification;
+import com.chris.cmarket.Common.Specification.SpecificationBuilder;
 import com.chris.cmarket.Common.Specification.WithRelationSpecification;
 import com.chris.cmarket.Product.Dto.ProductDTO;
 import com.chris.cmarket.Product.Model.ProductModel;
@@ -19,7 +20,6 @@ import com.chris.cmarket.Product.Repository.ProductRepository;
 import com.chris.cmarket.Product.Request.GetProductRequest;
 import com.chris.cmarket.Product.Specification.ProductSpecification;
 import com.chris.cmarket.Rarity.Specification.RarityIdSpecification;
-import com.chris.cmarket.Utils.SpecificationBuilder;
 
 import lombok.AllArgsConstructor;
 
