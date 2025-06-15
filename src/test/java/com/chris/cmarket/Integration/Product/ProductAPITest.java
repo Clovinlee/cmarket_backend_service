@@ -20,10 +20,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.chris.cmarket.Dtos.MerchantDTO;
-import com.chris.cmarket.Dtos.ProductDTO;
-import com.chris.cmarket.Requests.GetProductRequest;
-import com.chris.cmarket.Responses.APIResponse;
+import com.chris.cmarket.Common.Response.APIResponse;
+import com.chris.cmarket.Merchant.Dto.MerchantDTO;
+import com.chris.cmarket.Product.Dto.ProductDTO;
+import com.chris.cmarket.Product.Request.GetProductRequest;
 import com.chris.cmarket.Utils.CustomPageImpl;
 import com.chris.cmarket.Utils.LoggerGetter;
 

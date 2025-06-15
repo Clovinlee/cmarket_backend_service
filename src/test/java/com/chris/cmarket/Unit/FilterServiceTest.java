@@ -13,14 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.chris.cmarket.Dtos.MerchantDTO;
-import com.chris.cmarket.Dtos.RarityDTO;
-import com.chris.cmarket.Models.MerchantModel;
-import com.chris.cmarket.Models.RarityModel;
-import com.chris.cmarket.Repositories.MerchantRepository;
-import com.chris.cmarket.Repositories.RarityRepository;
-import com.chris.cmarket.Services.MerchantService;
-import com.chris.cmarket.Services.RarityService;
+import com.chris.cmarket.Merchant.Dto.MerchantDTO;
+import com.chris.cmarket.Merchant.Model.MerchantModel;
+import com.chris.cmarket.Merchant.Repository.MerchantRepository;
+import com.chris.cmarket.Merchant.Service.MerchantService;
+import com.chris.cmarket.Rarity.Dto.RarityDTO;
+import com.chris.cmarket.Rarity.Model.RarityModel;
+import com.chris.cmarket.Rarity.Repository.RarityRepository;
+import com.chris.cmarket.Rarity.Service.RarityService;
 
 @ExtendWith(MockitoExtension.class)
 public class FilterServiceTest {
