@@ -1,4 +1,4 @@
-package com.chris.cmarket.Configs;
+package com.chris.cmarket.Infrastructure.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

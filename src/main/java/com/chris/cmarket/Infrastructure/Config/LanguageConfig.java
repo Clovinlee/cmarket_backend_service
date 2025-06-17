@@ -1,4 +1,4 @@
-package com.chris.cmarket.Configs;
+package com.chris.cmarket.Infrastructure.Config;
 
 import java.util.Locale;
 
