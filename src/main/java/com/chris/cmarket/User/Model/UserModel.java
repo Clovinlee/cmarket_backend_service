@@ -30,6 +30,7 @@ public class UserModel {
     @Column(unique = true)
     private String email;
 
+    @Setter(AccessLevel.NONE)
     private String password;
 
     public UserModel(String name, String email, String password) {

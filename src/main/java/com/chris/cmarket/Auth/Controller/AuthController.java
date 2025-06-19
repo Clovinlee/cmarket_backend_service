@@ -1,5 +1,7 @@
 package com.chris.cmarket.Auth.Controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,8 +42,8 @@ public class AuthController {
     }
 
     @PostMapping("/me")
-    public String authMe(@RequestBody String entity) {
-        return "To be implemented";
+    public String authMe(Principal principal) {
+        return "Welcome" + " " + principal.getName() + "! You are authenticated.";
     }
 
 }
