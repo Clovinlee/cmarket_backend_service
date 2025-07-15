@@ -39,7 +39,7 @@ public class ProductService {
     public Optional<ProductDTO> getProductBySlug(String slug) {
         Optional<ProductModel> optProductModel = productRepository.findBySlug(slug);
 
-        return optProductModel.map(productModel -> new ProductDTO(productModel));
+        return optProductModel.map(ProductDTO::new);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
-        SpecificationBuilder<ProductModel> builder = new SpecificationBuilder<ProductModel>();
+        SpecificationBuilder<ProductModel> builder = new SpecificationBuilder<>();
 
         builder.addCriteria(PriceSpecification.withMax(param.getMaxPrice()))
                 .addCriteria(PriceSpecification.withMin(param.getMinPrice()))
@@ -67,7 +67,7 @@ public class ProductService {
         Page<ProductModel> resultPage = productRepository.findAll(builder.build(), pageable);
 
         List<ProductDTO> dtos = resultPage.stream()
-                .map(product -> new ProductDTO(product))
+                .map(ProductDTO::new)
                 .toList();
 
         return new PageImpl<>(dtos, pageable, resultPage.getTotalElements());

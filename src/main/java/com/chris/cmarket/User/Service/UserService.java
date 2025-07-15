@@ -12,9 +12,9 @@ import com.chris.cmarket.User.Repository.UserRepository;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private PasswordService passwordService;
+    private final PasswordService passwordService;
 
     public UserService(UserRepository userRepository, PasswordService passwordService) {
         this.userRepository = userRepository;
@@ -24,8 +24,8 @@ public class UserService {
     /**
      * Creates a new user in the database.
      * 
-     * @param userDTO
-     * @return
+     * @param userDTO user input dto
+     * @return new created user
      */
     public UserModel createUser(CreateUserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
@@ -42,9 +42,11 @@ public class UserService {
 
     /**
      * Retrieves a user by their email address.
-     * 
-     * @param email
-     * @return
+     * OR fails
+     *
+     * @param email user email
+     * @return user email
+     * @throws NotFoundException email not found
      */
     public UserModel findOrFailByEmail(String email) {
         return userRepository.findByEmail(email)
@@ -56,8 +58,8 @@ public class UserService {
     /**
      * Retrieves a user by their email address.
      * 
-     * @param email
-     * @return
+     * @param email user email
+     * @return nullable user model
      */
     public Optional<UserModel> findByEmail(String email) {
         return userRepository.findByEmail(email);

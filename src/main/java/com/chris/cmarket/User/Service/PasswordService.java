@@ -14,8 +14,8 @@ public class PasswordService {
     /**
      * Encodes a password using BCrypt.
      * 
-     * @param password
-     * @return
+     * @param password user password
+     * @return encoded password
      */
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -24,9 +24,9 @@ public class PasswordService {
     /**
      * Checks if a raw password matches an encoded password.
      * 
-     * @param rawPassword
-     * @param encodedPassword
-     * @return
+     * @param rawPassword user inputted password
+     * @param encodedPassword encoded password from DB
+     * @return password match or not
      */
     public boolean matches(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);

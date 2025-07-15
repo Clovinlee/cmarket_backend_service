@@ -1,5 +1,6 @@
 package com.chris.cmarket.Auth.Model;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -10,11 +11,12 @@ import com.chris.cmarket.User.Model.UserModel;
 
 public class UserDetailsImpl implements UserDetails {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private String email;
-    private String password;
-    private boolean enabled;
+    private final String email;
+    private final String password;
+    private final boolean enabled;
 
     public UserDetailsImpl(UserModel user) {
         this(user.getEmail(), user.getPassword(), true);

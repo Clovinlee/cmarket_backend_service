@@ -1,7 +1,13 @@
 package com.chris.cmarket.Common.Exception;
 
+import lombok.Getter;
+
+import java.io.Serial;
+
+@Getter
 public class NotFoundException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String messageKey;
@@ -17,9 +23,5 @@ public class NotFoundException extends RuntimeException {
 
     public NotFoundException() {
         this("The requested resource was not found.", null);
-    }
-
-    public String getMessageKey() {
-        return messageKey;
     }
 }

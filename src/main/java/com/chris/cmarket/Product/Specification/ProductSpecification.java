@@ -15,12 +15,12 @@ import jakarta.persistence.criteria.JoinType;
  * Multiple joins are expected when using withRelationSpecification to fetch
  * related entities.
  * JPA performs these joins to load related data in a single query.
- *
+ * <p>
  * The reason is because FETCH JOIN does not allow criteria of WHERE, as it will
  * only return the "correct" data
  * (for example, `employee where phone = 613`. Even
  * if employee has 2 phones, it wil only return phone with 613)
- * 
+ * <p>
  * To avoid this, we do double JOIN:
  * First join to fetch data, second join to filter the joined data
  */

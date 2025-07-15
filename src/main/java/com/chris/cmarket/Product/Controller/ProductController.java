@@ -51,9 +51,7 @@ public class ProductController {
     public ResponseEntity<APIResponse<?>> getProductBySlug(@PathVariable String slug) {
         Optional<ProductDTO> productSlug = productService.getProductBySlug(slug);
 
-        if (!productSlug.isPresent()) {
-            return ResponseEntity.status(404).body(APIResponse.notFound());
-        }
+        if (productSlug.isEmpty()) return ResponseEntity.status(404).body(APIResponse.notFound());
 
         return ResponseEntity.ok(APIResponse.success(productSlug.get()));
 

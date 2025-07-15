@@ -1,5 +1,6 @@
 package com.chris.cmarket.Auth.Handler;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.annotation.Order;
@@ -14,14 +15,11 @@ import com.chris.cmarket.Common.Constant.CmarketLoadOrderConstant;
 import com.chris.cmarket.Common.Response.APIResponse;
 
 @RestControllerAdvice
+@AllArgsConstructor
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
 public class AuthHandler {
 
-    private MessageSource messageSource;
-
-    public AuthHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
+    private final MessageSource messageSource;
 
     @ExceptionHandler(EmailAlreadyExistException.class)
     public ResponseEntity<APIResponse<String>> handleEmailAlreadyExistException(EmailAlreadyExistException ex) {
