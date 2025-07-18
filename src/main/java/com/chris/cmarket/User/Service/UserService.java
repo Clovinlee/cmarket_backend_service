@@ -1,41 +1,36 @@
 package com.chris.cmarket.User.Service;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.chris.cmarket.Auth.Exception.EmailAlreadyExistException;
 import com.chris.cmarket.Common.Exception.NotFoundException;
 import com.chris.cmarket.User.Dto.CreateUserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService {
+    
     private final UserRepository userRepository;
 
-    private final PasswordService passwordService;
-
-    public UserService(UserRepository userRepository, PasswordService passwordService) {
-        this.userRepository = userRepository;
-        this.passwordService = passwordService;
-    }
-
     /**
-     * Creates a new user in the database.
-     * 
-     * @param userDTO user input dto
-     * @return new created user
+     * @param userDTO         user input DTO
+     * @param encodedPassword encoded password
+     * @return created user
      */
-    public UserModel createUser(CreateUserDTO userDTO) {
+    public UserModel createUser(CreateUserDTO userDTO, String encodedPassword) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             throw new EmailAlreadyExistException(userDTO.getEmail());
         }
 
-        String encodedPassword = this.passwordService.encodePassword(userDTO.getPassword());
-
-        UserModel user = new UserModel(userDTO.getName(), userDTO.getEmail(),
-                encodedPassword);
+        UserModel user = new UserModel(
+                userDTO.getName(),
+                userDTO.getEmail(),
+                encodedPassword
+        );
 
         return userRepository.save(user);
     }
@@ -57,7 +52,7 @@ public class UserService {
 
     /**
      * Retrieves a user by their email address.
-     * 
+     *
      * @param email user email
      * @return nullable user model
      */

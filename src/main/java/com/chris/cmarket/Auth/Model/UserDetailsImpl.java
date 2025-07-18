@@ -4,28 +4,23 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.chris.cmarket.User.Model.UserModel;
 
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     private final String email;
-    private final String password;
     private final boolean enabled;
 
     public UserDetailsImpl(UserModel user) {
-        this(user.getEmail(), user.getPassword(), true);
-    }
-
-    public UserDetailsImpl(String email, String password, boolean enabled) {
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
+        this(user.getEmail(), true);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override

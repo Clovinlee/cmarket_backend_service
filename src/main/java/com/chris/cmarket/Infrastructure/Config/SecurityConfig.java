@@ -1,7 +1,8 @@
 package com.chris.cmarket.Infrastructure.Config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
+import com.chris.cmarket.Auth.Converter.JwtToUserConverter;
+import com.chris.cmarket.Common.Constant.CmarketLoadOrderConstant;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,10 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.chris.cmarket.Common.Constant.CmarketLoadOrderConstant;
-
-import lombok.AllArgsConstructor;
-
 @Configuration
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
 @EnableWebSecurity(debug = true)
@@ -23,6 +20,9 @@ import lombok.AllArgsConstructor;
 public class SecurityConfig {
 
     private final RouteConfig routeConfig;
+
+    private final JwtToUserConverter jwtToUserConverter;
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,8 +41,11 @@ public class SecurityConfig {
                         .anyRequest()
                         .permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(withDefaults())
-                .formLogin(AbstractHttpConfigurer::disable)
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt ->
+                                jwt.jwtAuthenticationConverter(jwtToUserConverter)
+                        )
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -50,7 +53,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    BCryptPasswordEncoder bPasswordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
