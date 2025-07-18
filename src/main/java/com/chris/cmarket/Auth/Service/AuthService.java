@@ -1,7 +1,8 @@
 package com.chris.cmarket.Auth.Service;
 
+import com.chris.cmarket.Auth.Dto.AuthJwtDto;
+import com.chris.cmarket.User.Dto.CreateUserDTO;
 import com.chris.cmarket.User.Dto.LoginUserDTO;
-import com.chris.cmarket.User.Dto.UserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Service.PasswordService;
 import com.chris.cmarket.User.Service.UserService;
@@ -13,21 +14,36 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AuthService {
 
-    final UserService userService;
-    final PasswordService passwordService;
+    private final UserService userService;
+    private final PasswordService passwordService;
+    private final JwtService jwtService;
 
     /**
-     * @param loginUserDTO the login credentials
-     * @return user dto
-     * @throws BadCredentialsException invalid credential
+     * Register user
+     *
+     * @param registerUserDTO register user DTO
      */
-    public UserDTO login(LoginUserDTO loginUserDTO) {
-        UserModel userModel = userService.findOrFailByEmail(loginUserDTO.getEmail());
+    public void register(CreateUserDTO registerUserDTO) {
+        String encodedPassword = this.passwordService.encodePassword(registerUserDTO.getPassword());
 
+        userService.createUser(registerUserDTO, encodedPassword);
+    }
+
+    /**
+     * Login user
+     *
+     * @param loginUserDTO Login user DTO
+     * @return JWT access & refresh token
+     */
+    public AuthJwtDto login(LoginUserDTO loginUserDTO) {
+        UserModel userModel = userService.findOrFailByEmail(loginUserDTO.getEmail());
         if (!passwordService.matches(loginUserDTO.getPassword(), userModel.getPassword())) {
             throw new BadCredentialsException("Bad Credentials");
         }
 
-        return new UserDTO(userModel);
+        String accessToken = jwtService.generateJwtToken(userModel.getEmail());
+        String refreshToken = jwtService.generateRefreshJwtToken(userModel.getEmail());
+
+        return new AuthJwtDto(accessToken, refreshToken);
     }
 }
