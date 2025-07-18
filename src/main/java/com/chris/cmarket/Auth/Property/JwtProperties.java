@@ -5,9 +5,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 @Component
 @ConfigurationProperties(prefix = "jwt")
-@SuppressWarnings("unused")
 @Data
 public class JwtProperties {
     /**
@@ -16,19 +18,14 @@ public class JwtProperties {
     private String keyStore;
 
     /**
-     * Property for the JWT key store password.
+     * Private key location of JWT key
      */
-    private String keyStorePassword;
+    private RSAPrivateKey privateKey;
 
     /**
-     * Property for the JWT key store type.
+     * Public key location of JWT key
      */
-    private String storePassword;
-
-    /**
-     * Property for the JWT key alias.
-     */
-    private String keyAlias;
+    private RSAPublicKey publicKey;
 
     /**
      * Expiry time in seconds for the JWT token.
