@@ -78,6 +78,7 @@ The project was built using these tech stacks:
   - JWT Auth
 
 **🚧 In progress**
+- OAuth2 Social Login
 - Redis Caching
 - Load Balancing
 - Admin & Permissions
