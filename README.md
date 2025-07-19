@@ -1,8 +1,7 @@
-<p align="center">
-  <a href="">
-    <strong>ICON</strong>
-  </a>
-</p>
+<h1 align="center">
+  <a id="readme-top"></a>
+  CMarket
+</h1>
 <div align="center">
   <b>Spring Boot</b> approach on fantasy ecommerce-like website <br/>
   <i>! for demonstration purpose !</i>
@@ -32,7 +31,11 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
+      <ul>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
     </li>
+    <li><a href="#concepts">Concepts</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -40,15 +43,72 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 ---
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-sdsada
+CMarket is my ongoing project where I’m building the backend system of an e-commerce web application using various tech stacks. For this project, I’m using **_Spring Boot_** to implement the backend. Throughout the development, I maintain proper code structure and management to align with business standards. (You may review the working code — I follow and truly value **_clean code principles_**.) I’ve poured all my coding knowledge and the concepts I've learned from both my studies and work experience into this project.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Built With
+The project was built using these tech stacks:
+* Spring 6.1.6
+* Spring Boot 3.4.5
+* Docker
+* MySQL 8.4
+* AWS
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Roadmap
+**✅ Completed**
+- Spring Environment
+  - Multi-profile environment 
+- Spring JPA
+- Spring Boot MVC (REST API)
+  - Localization
+- Spring Test (Integration - Unit - Mock)
+- Spring Security
+  - Basic Auth (Validation, Error Handling, etc...) 
+  - Route Configuration 
+  - JWT Auth
+
+**🚧 In progress**
+- Redis Caching
+- Load Balancing
+- Admin & Permissions
+  - Create Items
+  - File Upload Support
+- Spring AOP
+- Dockerization
+- CICD
+- Cloud Hosting
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Concepts
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Programming
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Database
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Getting Started
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Prerequisites
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Installations
+_Will be updated after dockerization is done_
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contacts
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
