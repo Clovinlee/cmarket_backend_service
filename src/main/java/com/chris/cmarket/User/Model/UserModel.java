@@ -1,13 +1,9 @@
 package com.chris.cmarket.User.Model;
 
+import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,14 +24,27 @@ public class UserModel {
     private String name;
 
     @Column(unique = true)
+    @Nullable
     private String email;
 
     @Setter(AccessLevel.NONE)
     private String password;
 
+    private String provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
+
     public UserModel(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public UserModel(OAuthUserDTO oAuthUserDTO) {
+        this(oAuthUserDTO.getName(), oAuthUserDTO.getEmail(), null);
+
+        this.provider = oAuthUserDTO.getProvider();
+        this.providerId = oAuthUserDTO.getProviderId();
     }
 }
