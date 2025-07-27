@@ -5,6 +5,7 @@ import com.chris.cmarket.Common.Constant.CmarketLoadOrderConstant;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,13 +17,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
 @EnableWebSecurity(debug = true)
+@PropertySource({
+        "classpath:configs/auth/github.properties"
+})
 @AllArgsConstructor
 public class SecurityConfig {
 
     private final RouteConfig routeConfig;
 
     private final JwtToUserConverter jwtToUserConverter;
-
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
