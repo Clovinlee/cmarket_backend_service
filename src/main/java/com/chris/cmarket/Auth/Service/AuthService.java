@@ -26,7 +26,7 @@ public class AuthService {
     public void register(CreateUserDTO registerUserDTO) {
         String encodedPassword = this.passwordService.encodePassword(registerUserDTO.getPassword());
 
-        userService.createUser(registerUserDTO, encodedPassword);
+        userService.createUserFromAuth(registerUserDTO, encodedPassword);
     }
 
     /**

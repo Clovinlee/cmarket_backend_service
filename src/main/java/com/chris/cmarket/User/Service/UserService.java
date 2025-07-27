@@ -1,8 +1,10 @@
 package com.chris.cmarket.User.Service;
 
 import com.chris.cmarket.Auth.Exception.EmailAlreadyExistException;
+import com.chris.cmarket.Auth.Exception.OAuthUserAlreadyExistException;
 import com.chris.cmarket.Common.Exception.NotFoundException;
 import com.chris.cmarket.User.Dto.CreateUserDTO;
+import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -21,8 +23,8 @@ public class UserService {
      * @param encodedPassword encoded password
      * @return created user
      */
-    public UserModel createUser(CreateUserDTO userDTO, String encodedPassword) {
-        if (userRepository.existsByEmail(userDTO.getEmail())) {
+    public UserModel createUserFromAuth(CreateUserDTO userDTO, String encodedPassword) {
+        if (userRepository.existsByEmailAndProviderIsNull(userDTO.getEmail())) {
             throw new EmailAlreadyExistException(userDTO.getEmail());
         }
 
@@ -31,6 +33,20 @@ public class UserService {
                 userDTO.getEmail(),
                 encodedPassword
         );
+
+        return userRepository.save(user);
+    }
+
+    /**
+     * @param oAuthUserDTO oAuthUserDTO from oauth verification
+     * @return created UserModel
+     */
+    public UserModel createUserFromOAuth(OAuthUserDTO oAuthUserDTO) {
+        if (userRepository.existsByProviderAndProviderId(oAuthUserDTO.getProvider(), oAuthUserDTO.getProviderId())) {
+            throw new OAuthUserAlreadyExistException(oAuthUserDTO.getName(), oAuthUserDTO.getProvider(), oAuthUserDTO.getProviderId());
+        }
+
+        UserModel user = new UserModel(oAuthUserDTO);
 
         return userRepository.save(user);
     }
