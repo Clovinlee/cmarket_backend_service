@@ -7,9 +7,13 @@ import java.io.Serial;
 
 @Getter
 @AllArgsConstructor
-public class EmailAlreadyExistException extends RuntimeException {
+public class OAuthUserAlreadyExistException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String email;
+    private String name;
+
+    private String provider;
+
+    private String providerId;
 }

@@ -1,5 +1,8 @@
 package com.chris.cmarket.Common.Handler;
 
+import com.chris.cmarket.Common.Exception.NotFoundException;
+import com.chris.cmarket.Common.Response.APIResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -7,11 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.chris.cmarket.Common.Exception.NotFoundException;
-import com.chris.cmarket.Common.Response.APIResponse;
-
 @RestControllerAdvice
-@Order(Integer.MAX_VALUE)
+@Order()
+@Slf4j
 public class GeneralHandler {
 
     @Value("${app.debug-mode:false}")
@@ -26,11 +27,11 @@ public class GeneralHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<APIResponse<String>> handleGeneralExceptions(Exception ex) throws Exception {
+        log.error("Unhandled exception occurred", ex);
         if (isDebugMode) {
-            ex.printStackTrace();
-
             throw ex;
         }
+
         APIResponse<String> response = APIResponse.failed("Internal server error");
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
