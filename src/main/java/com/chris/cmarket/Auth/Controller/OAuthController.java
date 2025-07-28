@@ -1,6 +1,9 @@
 package com.chris.cmarket.Auth.Controller;
 
 import com.chris.cmarket.Auth.Contract.OAuthServiceInterface;
+import com.chris.cmarket.Auth.Dto.AuthJwtDto;
+import com.chris.cmarket.Auth.Enum.OAuthProviderEnum;
+import com.chris.cmarket.Auth.Service.JwtService;
 import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Service.UserService;
@@ -16,14 +19,16 @@ public class OAuthController {
 
     private final OAuthServiceInterface githubOauthService;
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public OAuthController(@Qualifier("github") OAuthServiceInterface githubOauthService, UserService userService) {
+    public OAuthController(@Qualifier("github") OAuthServiceInterface githubOauthService, UserService userService, JwtService jwtService) {
         this.githubOauthService = githubOauthService;
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping("/github/callback")
-    public String githubOauthCallback(@RequestParam("code") String code, @RequestParam(value = "code_verifier", required = false) String codeVerifier) {
+    public AuthJwtDto githubOauthCallback(@RequestParam("code") String code, @RequestParam(value = "code_verifier", required = false) String codeVerifier) {
         String accessCode = (null != codeVerifier)
                 ? githubOauthService.exchangeAccessToken(code, codeVerifier)
                 : githubOauthService.exchangeAccessToken(code);
@@ -31,6 +36,9 @@ public class OAuthController {
         OAuthUserDTO oauthUserData = githubOauthService.fetchUserInfo(accessCode);
         UserModel userData = userService.createUserFromOAuth(oauthUserData);
 
-        return userData.toString();
+        String accessToken = jwtService.generateJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
+        String refreshToken = jwtService.generateRefreshJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
+
+        return new AuthJwtDto(accessToken, refreshToken);
     }
 }

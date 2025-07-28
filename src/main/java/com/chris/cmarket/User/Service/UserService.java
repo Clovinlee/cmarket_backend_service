@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService {
-    
+
     private final UserRepository userRepository;
 
     /**
@@ -64,6 +64,13 @@ public class UserService {
                 .orElseThrow(
                         () -> new NotFoundException(
                                 String.format("User with email %s not found", email), null));
+    }
+
+    public UserModel findOrFailByUuid(String uuid) {
+        return userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new NotFoundException(
+                                String.format("User with uuid %s not found", uuid), null));
     }
 
     /**

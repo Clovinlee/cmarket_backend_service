@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 @Data // Generates getters, setters, toString, equals, hashCode
@@ -22,6 +24,10 @@ public class UserModel {
     private Long id;
 
     private String name;
+
+    @Setter(AccessLevel.NONE)
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(unique = true)
     @Nullable

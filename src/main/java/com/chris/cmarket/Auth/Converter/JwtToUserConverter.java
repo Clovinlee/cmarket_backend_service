@@ -23,7 +23,8 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
     @NonNull
     public UsernamePasswordAuthenticationToken convert(Jwt source) {
         String subject = source.getSubject();
-        UserModel user = userService.findOrFailByEmail(subject);
+        UserModel user = userService.findOrFailByUuid(subject);
+
         UserDetails userPrincipal = new UserDetailsImpl(user);
 
         return new UsernamePasswordAuthenticationToken(userPrincipal, source, Collections.emptyList());
