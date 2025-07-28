@@ -76,17 +76,18 @@ The project was built using these tech stacks:
   - Basic Auth (Validation, Error Handling, etc...) 
   - Route Configuration 
   - JWT Auth
+- OAuth2 Social Login
+  - Github OAuth w/ PKCE
 
 **🚧 In progress**
-- OAuth2 Social Login
+- Dockerization _(Next)_
+- CICD
 - Redis Caching
 - Load Balancing
 - Admin & Permissions
   - Create Items
   - File Upload Support
 - Spring AOP
-- Dockerization
-- CICD
 - Cloud Hosting
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
