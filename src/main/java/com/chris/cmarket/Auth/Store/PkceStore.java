@@ -1,12 +1,10 @@
 package com.chris.cmarket.Auth.Store;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Profile("dev")
 @Component
 public class PkceStore {
 
