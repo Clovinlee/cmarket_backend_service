@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity()
 @PropertySource({
         "classpath:configs/auth/github.properties"
 })
