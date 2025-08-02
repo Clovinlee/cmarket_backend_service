@@ -44,4 +44,5 @@ out/
 
 ### Properties ###
 application.properties
-**/src/main/resources/configs/auth/
+**/src/main/resources/configs/
+**/src/main/resources/keys/

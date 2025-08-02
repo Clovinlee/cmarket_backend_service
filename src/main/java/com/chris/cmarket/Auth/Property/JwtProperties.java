@@ -13,11 +13,6 @@ import java.security.interfaces.RSAPublicKey;
 @Data
 public class JwtProperties {
     /**
-     * Property for the JWT key store file location.
-     */
-    private String keyStore;
-
-    /**
      * Private key location of JWT key
      */
     private RSAPrivateKey privateKey;
