@@ -52,7 +52,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-CMarket is my ongoing project where I’m building the backend system of an e-commerce web application using various tech stacks. For this project, I’m using **_Spring Boot_** to implement the backend. Throughout the development, I maintain proper code structure and management to align with business standards. (You may review the working code — I follow and truly value **_clean code principles_**.) I’ve poured all my coding knowledge and the concepts I've learned from both my studies and work experience into this project.
+CMarket is my ongoing project where I’m building the backend system of an e-commerce web application using various tech stacks. For this project, I’m using **_Spring Boot_** to implement the backend. Throughout the development, I maintain proper code structure & writing to align with business standards. I’ve poured all my coding knowledge and the concepts I've learned from both my studies and work experience into this project.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -61,7 +61,6 @@ The project was built using these tech stacks:
 * Spring Boot 3.4.5
 * Docker
 * MySQL 8.4
-* AWS
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Roadmap
@@ -78,11 +77,11 @@ The project was built using these tech stacks:
   - JWT Auth
 - OAuth2 Social Login
   - Github OAuth w/ PKCE
+- Dockerization
 
 **🚧 In progress**
-- Dockerization _(Next)_
+- Redis Caching _**(next)**_
 - CICD
-- Redis Caching
 - Load Balancing
 - Admin & Permissions
   - Create Items
@@ -101,16 +100,60 @@ The project was built using these tech stacks:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Follow the steps below to set up and run the project on your local machine.
 
 ### Prerequisites
+- Java **21** or higher
+- Spring Boot **3.4.5** or later
+- Spring Framework **6.1.6** or later
+- OpenSSL (tested with version _**3.5.0**_) for JWT key generation
+- Working `application.properties` configurable file (_explained below_)
+
+#### With Docker
+- [Docker](https://docs.docker.com/get-docker/) (Tested with version 28.x or higher)
+- Docker Compose V2
+- `.env` docker configurable file _(for example, see below)_
+- `application.properties` configurable file for Spring Boot with Docker _(for example, see below)_
+
+#### Without Docker
+- MySQL **8.4** or compatible
+- `application.properties` _(or just set the application profile to be `dev`)_
+
+#### Configuration File
+- Example `.env` file for docker
+```properties
+MYSQL_DATABASE=cmarket
+MYSQL_ROOT_USER=root
+MYSQL_ROOT_PASSWORD=root
+MYSQL_HOST=mysql
+```
+
+- Example `application.properties` file for Spring Boot with Docker
+```properties
+spring.datasource.url=jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
+spring.datasource.username=${MYSQL_ROOT_USER}
+spring.datasource.password=${MYSQL_ROOT_PASSWORD}
+spring.jpa.hibernate.ddl-auto=update
+```
+
+- Example `application.properties` file for Spring Boot without Docker
+```properties
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://localhost:3306/cmarket
+spring.datasource.username=root
+spring.datasource.password=root
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installations
-_Will be updated after dockerization is done_
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+-  Make sure you are in the root project folder
+- Run `openssl genpkey -algorithm RSA -out src/main/resources/keys/jwt/private.key -pkeyopt rsa_keygen_bits:2048` to generate the private key in `classpath/keys/jwt`
+- Run `openssl rsa -pubout -in src/main/resources/keys/jwt/private.key -out src/main/resources/keys/jwt/public.pem` to generate the public key in same folder
+- Run `./gradlew bootJar` to build the executable `.jar` file
+- Run `docker compose up` (_if with docker_) 
+- Or execute the generated `.jar` generated in `build/libs/cmarket-1.0.jar`(_without docker_)
 
-## Contacts
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
