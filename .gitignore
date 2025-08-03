@@ -40,10 +40,9 @@ out/
 .vscode/
 
 ### Keys ###
-**/src/main/resources/configs/jwt/
 *.p12
 
 ### Properties ###
 application.properties
-**/src/main/resources/configs/
+**/src/main/resources/configs/auth/
 **/src/main/resources/keys/
