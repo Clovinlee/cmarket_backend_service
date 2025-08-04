@@ -17,15 +17,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @Order(CmarketLoadOrderConstant.DEFAULT_PRIORITY)
 @EnableWebSecurity()
-@PropertySource({
-        "classpath:configs/auth/github.properties"
-})
+@PropertySource(value = {"classpath:configs/auth/github.properties"}, ignoreResourceNotFound = true)
 @AllArgsConstructor
 public class SecurityConfig {
 
     private final RouteConfig routeConfig;
 
     private final JwtToUserConverter jwtToUserConverter;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,10 +56,5 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

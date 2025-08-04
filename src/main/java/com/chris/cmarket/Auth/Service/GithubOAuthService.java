@@ -12,6 +12,7 @@ import com.chris.cmarket.Auth.Store.PkceStore;
 import com.chris.cmarket.Common.Util.PkceGeneratorUtil;
 import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -21,7 +22,11 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@Service("github")
+@Service()
+@ConditionalOnProperty(
+        prefix = "spring.security.oauth2.client.registration.github",
+        name = "client-id"
+)
 @AllArgsConstructor
 public class GithubOAuthService implements OAuthServiceInterface {
 

@@ -8,11 +8,13 @@ import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Service.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@ConditionalOnBean(OAuthServiceInterface.class)
 @RestController
 @RequestMapping("/oauth")
 public class OAuthController {
@@ -21,7 +23,7 @@ public class OAuthController {
     private final UserService userService;
     private final JwtService jwtService;
 
-    public OAuthController(@Qualifier("github") OAuthServiceInterface githubOauthService, UserService userService, JwtService jwtService) {
+    public OAuthController(@Qualifier("githubOAuthService") OAuthServiceInterface githubOauthService, UserService userService, JwtService jwtService) {
         this.githubOauthService = githubOauthService;
         this.userService = userService;
         this.jwtService = jwtService;
