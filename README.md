@@ -31,20 +31,16 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
-      <ul>
-        <li><a href="#roadmap">Roadmap</a></li>
-      </ul>
     </li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#concepts">Concepts</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installations">Installations</a></li>
       </ul>
     </li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -63,40 +59,127 @@ The project was built using these tech stacks:
 * MySQL 8.4
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Roadmap
+### Features
 **✅ Completed**
-- Spring Environment
-  - Multi-profile environment 
-- Spring JPA
-- Spring Boot MVC (REST API)
+- **Spring Environment**
+  - Multi-profile environment
+- **Spring JPA**
+- **Spring Boot MVC (REST API)**
   - Localization
-- Spring Test (Integration - Unit - Mock)
-- Spring Security
-  - Basic Auth (Validation, Error Handling, etc...) 
-  - Route Configuration 
+- **Spring Test (Integration - Unit - Mock)**
+- **Spring Security**
+  - Basic Auth (Validation, Error Handling, etc...)
+  - Route Configuration
   - JWT Auth
-- OAuth2 Social Login
+- **OAuth2 Social Login**
   - Github OAuth w/ PKCE
-- Dockerization
+- **Dockerization**
 
 **🚧 In progress**
-- Redis Caching _**(next)**_
-- CICD
-- Load Balancing
-- Admin & Permissions
+- **Redis Caching** _**(next)**_
+- **CICD**
+- **Spring AOP**
+- **Admin & Permissions**
   - Create Items
   - File Upload Support
-- Spring AOP
-- Cloud Hosting
+- **Cloud Hosting**
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Concepts
+The project follows a _Domain-Driven Design (DDD)_ structure within a monolithic architecture as follows:
+```plaintext
+Domain/
+├── Config/ (@Config classes)
+├── Contracts/
+├── Controller/ (@RestController classes)
+├── Handler/ (@RestControllerAdvice classes)
+├── Model/ (Jpa @Entity Classes)
+├── Property/ (@ConfigurationProperties Classes)
+├── Service/ (@Service classes)
+└── ... (Enum, Exception, Dto, etc)
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Programming
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+### Technicals
 
-### Database
+<details>
+  <summary><strong>👥 Spring Profile Bean Management</strong></summary>
+  <small>The main concept is to use different env for different purpose. The profile can be changed through the environment or by modifying <code>application.properties</code> directly.</small> 
+  <br/><br/>
+  <img src="https://i.imgur.com/2Oki6Dn.png" alt="CMarket Spring Boot Profile Management Concept">
+</details>
+<br>
+<details>
+  <summary><strong>🌐 Routing</strong></summary>
+  <small>In every domain, we make a route config inside the domain's config folder to configure the route security behavior of the domain</small>
+
+<pre>
+Domain/
+├── Route/DomainRouteConfig.java
+└── ...
+</pre>
+
+  <small>Every route config must implement the `RouteConfigInterface` and use `@Component` annotation for its configuration to be loaded and collected into an array in the `RouteConfig` configuration class
+  </small> 
+  ```java
+  // RouteConfig
+
+  private final RouteConfigInterface[] routeConfigs;
+
+  public void initializeRoutes(HttpSecurity http) throws Exception {
+    for (RouteConfigInterface routeConfig : routeConfigs) {
+      routeConfig.configureRoute(http);
+    }
+  }
+  ```
+  <small>_**(For detailed docs, refer to the diagram below / Javadoc inside the mentioned class)**_
+  </small>
+  
+  <small>The `RouteConfig` then is injected into the `SecurityConfig`, and it invokes the `RouteConfig.initializeRoutes(..)` method to initialize all the routes specified. As an addition, the `RouteConfig` will also configure the default behavior to other route that are not configured as it follows the _**Most Specific to Least Specific rule**_</small>
+
+  <img src="https://i.imgur.com/EX96isX.png" alt="CMarket Spring Boot Route Concept">
+  
+</details>
+<br>
+<details>
+  <summary>
+    <strong>🛠️ Specification Builder | <i>Query Builder</i></strong>
+  </summary>
+  
+  <small>The specification builder follows the **builder pattern** to create specifications for querying data from the repository. It encapsulates complexity by keeping all the given specifications and reduce the verbosity by handling null values and chaining them together.
+  </small>
+  
+  <img src="https://i.imgur.com/apYYQuq.png" alt="CMarket Spring Boot Specification Builder Concept">
+</details>
+<br>
+<details>
+  <summary><strong>🔑 JWT</strong></summary>
+  <small>
+  JWT uses a private/public key for signing and verification. In Spring, JWT env values loaded with 
+  <code>@ConfigurationProperties</code> and then injected into <code>JwtConfig</code> for use in <code>JwtService</code>. A custom 
+  <code>JwtToUserConverter</code> is also needed to convert JWT subject into principal in <code>SecurityConfig</code> 
+  </small>
+<br/><br/>
+<img src="https://i.imgur.com/IizotMp.png" alt="CMarket Spring Boot JWT Concept">
+
+</details>
+<br>
+<details>
+  <summary><strong>🔐 OAuth</strong></summary>
+
+  <small> The OAuth used uses the PKCE concepts to helps authorize the process in exchanging the access code.</small> <br/>
+
+   <small>
+  We first define <code>OAuthServiceInterface</code> as a contract for OAuth services, with abstract methods for exchanging access codes and fetching user info. <br> 
+  A <code>@ConfigurationProperties</code> class maps necessary environment variables and is injected into the interface’s implementation for authentication. 
+  We then create <code>RestClientConfig</code> and an <code>OAuthClient</code> <b>declarative HTTP interface</b> for third-party calls. <br>
+  Finally, we register an <code>OAuthController</code> with the callback URL, loading it only when an <code>OAuthServiceInterface</code> bean exists 
+  (<code>@ConditionalOnBean</code>), and inject the correct service by name (e.g., <code>@Service("githubOAuth")</code>).
+  </small>
+  <br/><br/>
+<img src="https://i.imgur.com/GMZjn9f.png" alt="CMarket Spring Boot OAuth Concept">
+</details>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
