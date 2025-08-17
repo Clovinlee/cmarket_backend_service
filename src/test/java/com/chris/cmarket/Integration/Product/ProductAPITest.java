@@ -1,91 +1,42 @@
 package com.chris.cmarket.Integration.Product;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import com.chris.cmarket.Common.Dto.CustomPageImplDto;
 import com.chris.cmarket.Common.Response.APIResponse;
 import com.chris.cmarket.Merchant.Dto.MerchantDTO;
 import com.chris.cmarket.Product.Dto.ProductDTO;
 import com.chris.cmarket.Product.Request.GetProductRequest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 public class ProductAPITest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
-    @Test
-    void shouldGetProductsPagination() {
-        ResponseEntity<APIResponse<CustomPageImplDto<ProductDTO>>> response = restTemplate.exchange(
-                "/products",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<APIResponse<CustomPageImplDto<ProductDTO>>>() {
-                });
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        CustomPageImplDto<ProductDTO> data = response.getBody().getData();
-        assertEquals(10, data.getTotalElements());
-    }
-
-    @ParameterizedTest
-    @MethodSource("getProductPaginationWithFilterProvider")
-    void shouldGetProductsPaginationWithFilters(GetProductRequest getRequest) {
-        ResponseEntity<APIResponse<CustomPageImplDto<ProductDTO>>> response = restTemplate.exchange(
-                "/products" + getRequest.toQueryParam(),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<APIResponse<CustomPageImplDto<ProductDTO>>>() {
-                });
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        List<ProductDTO> responseProducts = response.getBody().getData().getContent();
-        for (ProductDTO product : responseProducts) {
-            if (null != getRequest.getName()) {
-                assertTrue(product.getName().toLowerCase().contains(getRequest.getName().toLowerCase()));
-            }
-            if (null != getRequest.getMinPrice()) {
-                assertTrue(product.getPrice().compareTo(getRequest.getMinPrice()) >= 0);
-            }
-            if (null != getRequest.getMaxPrice()) {
-                assertTrue(product.getPrice().compareTo(getRequest.getMaxPrice()) <= 0);
-            }
-            if (null != getRequest.getRarity()) {
-                assertEquals(getRequest.getRarity(), product.getIdRarity());
-            }
-            if (null != getRequest.getMerchants()) {
-                List<Long> productMerchantIds = product.getMerchants()
-                        .stream()
-                        .map(MerchantDTO::getLevel)
-                        .collect(Collectors.toList());
-
-                boolean hasAtLeastOne = getRequest.getMerchants()
-                        .stream()
-                        .anyMatch(productMerchantIds::contains);
-
-                assertTrue(hasAtLeastOne);
-            }
-        }
-    }
+    private final TypeReference<APIResponse<CustomPageImplDto<ProductDTO>>> productAPIResponseTypeReference =
+            new TypeReference<>() {};
 
     /**
      * Provides test parameters for the method
@@ -100,5 +51,70 @@ public class ProductAPITest {
                 GetProductRequest.builder().name("ring").maxPrice(new BigDecimal(100)).build(),
                 GetProductRequest.builder().rarity(4L).build(),
                 GetProductRequest.builder().merchants(Arrays.asList(2L, 3L)).build());
+    }
+
+    @Test
+    void shouldGetProductsPagination() throws Exception {
+
+        MvcResult result = mockMvc.perform(get("/products")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = result.getResponse().getContentAsString();
+        APIResponse<CustomPageImplDto<ProductDTO>> apiResponse = objectMapper.readValue(
+                responseJson,
+                productAPIResponseTypeReference
+        );
+
+        CustomPageImplDto<ProductDTO> data = apiResponse.getData();
+
+        assertEquals(10, data.getTotalElements());
+    }
+
+    @ParameterizedTest
+    @MethodSource("getProductPaginationWithFilterProvider")
+    void shouldGetProductsPaginationWithFilters(GetProductRequest getRequest) throws Exception {
+        MvcResult result = mockMvc.perform(
+                        get("/products" + getRequest.toQueryParam())
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = result.getResponse().getContentAsString();
+        APIResponse<CustomPageImplDto<ProductDTO>> apiResponse = objectMapper.readValue(
+                responseJson,
+                new TypeReference<APIResponse<CustomPageImplDto<ProductDTO>>>() {}
+        );
+
+        List<ProductDTO> responseProducts = apiResponse.getData().getContent();
+
+        // Assertions per filter
+        for (ProductDTO product : responseProducts) {
+            if (null != getRequest.getName()) {
+                assertTrue(product.getName().toLowerCase().contains(getRequest.getName().toLowerCase()));
+            }
+            if (null != getRequest.getMinPrice()) {
+                assertTrue(product.getPrice().compareTo(getRequest.getMinPrice()) >= 0); // price should be greater equal than minPrice
+            }
+            if (null != getRequest.getMaxPrice()) {
+                assertTrue(product.getPrice().compareTo(getRequest.getMaxPrice()) <= 0); // price should be lesser equal than maxPrice
+            }
+            if (null != getRequest.getRarity()) {
+                assertEquals(getRequest.getRarity(), product.getIdRarity());
+            }
+            if (null != getRequest.getMerchants()) {
+                List<Long> productMerchantIds = product.getMerchants()
+                        .stream()
+                        .map(MerchantDTO::getLevel)
+                        .toList();
+
+                boolean hasAtLeastOne = getRequest.getMerchants()
+                        .stream()
+                        .anyMatch(productMerchantIds::contains);
+
+                assertTrue(hasAtLeastOne);
+            }
+        }
     }
 }
