@@ -36,13 +36,13 @@ public class GetProductRequest {
      * @return the zero-based page index
      */
     public Integer getZeroBasedPage() {
-        return this.page - 1;
+        return (this.page <= 0 ? 1 : this.page) - 1;
     }
 
     /**
      * Converts get product request to query params
-     * 
-     * @return
+     *
+     * @return query param string
      */
     public String toQueryParam() {
         StringBuilder sb = new StringBuilder("?");
