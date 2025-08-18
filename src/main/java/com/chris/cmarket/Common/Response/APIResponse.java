@@ -3,6 +3,7 @@ package com.chris.cmarket.Common.Response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Generic API response wrapper for standardizing success and error responses.
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class APIResponse<T> {
 
