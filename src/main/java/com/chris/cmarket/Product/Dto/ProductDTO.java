@@ -1,22 +1,19 @@
 package com.chris.cmarket.Product.Dto;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.hibernate.Hibernate;
-
 import com.chris.cmarket.Merchant.Dto.MerchantDTO;
 import com.chris.cmarket.Product.Model.ProductModel;
 import com.chris.cmarket.Rarity.Dto.RarityDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.Hibernate;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -29,7 +26,7 @@ public class ProductDTO {
     private String image;
     private String description;
     private BigDecimal price;
-    private Optional<RarityDTO> rarity;
+    private RarityDTO rarity;
     private List<MerchantDTO> merchants;
 
     @JsonProperty("id_rarity")
@@ -41,11 +38,11 @@ public class ProductDTO {
         this.image = product.getImage();
         this.description = product.getDescription();
         this.price = product.getPrice();
-        this.rarity = Optional.empty();
+        this.rarity = null;
         this.idRarity = product.getIdRarity();
 
         if (Hibernate.isInitialized(product.getRarity())) {
-            this.rarity = Optional.of(new RarityDTO(product.getRarity()));
+            this.rarity = new RarityDTO(product.getRarity());
         }
 
         if (Hibernate.isInitialized(product.getProductMerchants())) {
