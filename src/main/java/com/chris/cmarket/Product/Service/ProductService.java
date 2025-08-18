@@ -3,6 +3,7 @@ package com.chris.cmarket.Product.Service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -49,6 +50,7 @@ public class ProductService {
      * @return a {@link Page} of {@link ProductDTO} containing the filtered
      *         products.
      */
+    @Cacheable(value = "product", key = "#param.toQueryParam()")
     public Page<ProductDTO> getProducts(GetProductRequest param) {
         int page = param.getZeroBasedPage();
         int size = param.getSize();
