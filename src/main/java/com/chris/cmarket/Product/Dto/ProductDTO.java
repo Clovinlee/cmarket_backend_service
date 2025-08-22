@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +21,10 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor
 @JsonInclude(Include.NON_ABSENT)
-public class ProductDTO {
+public class ProductDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String name;
     private String slug;
