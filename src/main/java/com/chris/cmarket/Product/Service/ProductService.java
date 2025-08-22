@@ -1,16 +1,6 @@
 package com.chris.cmarket.Product.Service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
+import com.chris.cmarket.Common.Dto.CustomPageImplDto;
 import com.chris.cmarket.Common.Specification.NameSpecification;
 import com.chris.cmarket.Common.Specification.PriceSpecification;
 import com.chris.cmarket.Common.Specification.SpecificationBuilder;
@@ -21,8 +11,15 @@ import com.chris.cmarket.Product.Repository.ProductRepository;
 import com.chris.cmarket.Product.Request.GetProductRequest;
 import com.chris.cmarket.Product.Specification.ProductSpecification;
 import com.chris.cmarket.Rarity.Specification.RarityIdSpecification;
-
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -51,7 +48,8 @@ public class ProductService {
      *         products.
      */
     @Cacheable(value = "product", key = "#param.toQueryParam()")
-    public Page<ProductDTO> getProducts(GetProductRequest param) {
+    public CustomPageImplDto<ProductDTO> getProducts(GetProductRequest param) {
+        System.out.println("CHRIS FROM SERVICE HERE!");
         int page = param.getZeroBasedPage();
         int size = param.getSize();
 
@@ -67,12 +65,9 @@ public class ProductService {
                 .addCriteria(WithRelationSpecification.fetch("rarity", "productMerchants"));
 
         Page<ProductModel> resultPage = productRepository.findAll(builder.build(), pageable);
+        Page<ProductDTO> dtoPage = resultPage.map(ProductDTO::new);
 
-        List<ProductDTO> dtos = resultPage.stream()
-                .map(ProductDTO::new)
-                .toList();
-
-        return new PageImpl<>(dtos, pageable, resultPage.getTotalElements());
+        return new CustomPageImplDto<>(dtoPage);
     }
 
 }
