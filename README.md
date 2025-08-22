@@ -45,10 +45,12 @@
 </details>
 
 ---
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-CMarket is my ongoing project where I’m building the backend system of an e-commerce web application using various tech stacks. For this project, I’m using **_Spring Boot_** to implement the backend. Throughout the development, I maintain proper code structure & writing to align with business standards. I’ve poured all my coding knowledge and the concepts I've learned from both my studies and work experience into this project.
+CMarket is my ongoing project where I’m developing the core backend functionality of an e-commerce web application using **_Spring Boot_**. My focus is on _building the essential system logic and backend services_, without the extra layers, so I can deepen my understanding and learn more effectively. Throughout the development, I maintain clean code structure and align with business standards, showcasing my proficiency in **_Spring Boot_**.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -57,6 +59,7 @@ The project was built using these tech stacks:
 * Spring Boot 3.4.5
 * Docker
 * MySQL 8.4
+* Redis 7.4
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Features
@@ -66,6 +69,7 @@ The project was built using these tech stacks:
 - **Spring JPA**
 - **Spring Boot MVC (REST API)**
   - Localization
+  - Rest Handler
 - **Spring Test (Integration - Unit - Mock)**
 - **Spring Security**
   - Basic Auth (Validation, Error Handling, etc...)
@@ -74,16 +78,23 @@ The project was built using these tech stacks:
 - **OAuth2 Social Login**
   - Github OAuth w/ PKCE
 - **Dockerization**
+  - Docker File
+  - Docker Compose
+- **Redis Caching**
+  - Simple Cache / Redis Cache (`spring.cache.type=simple/redis`)
+  - Unit Test
 
 **🚧 In progress**
-- **Redis Caching** _**(next)**_
-- **CICD**
+- **CICD** (_next_)
 - **Spring AOP**
 - **Admin & Permissions**
   - Create Items
   - File Upload Support
-- **Cloud Hosting**
+- **API Hosting**
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 
 ## Concepts
 The project follows a _Domain-Driven Design (DDD)_ structure within a monolithic architecture as follows:
@@ -182,6 +193,8 @@ Domain/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+
 ## Getting Started
 Follow the steps below to set up and run the project on your local machine.
 
@@ -201,6 +214,7 @@ Follow the steps below to set up and run the project on your local machine.
 #### Without Docker
 - MySQL **8.4** or compatible
 - `application.properties` _(or just set the application profile to be `dev`)_
+- Redis **7.4** or just use `spring.cache.type=simple` in the `application.properties` to use simple cache
 
 #### Configuration File
 - Example `.env` file for docker
