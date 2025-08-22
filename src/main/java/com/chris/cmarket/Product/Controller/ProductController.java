@@ -1,5 +1,6 @@
 package com.chris.cmarket.Product.Controller;
 
+import com.chris.cmarket.Common.Dto.CustomPageImplDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
-
-import org.springframework.data.domain.Page;
 
 import com.chris.cmarket.Common.Response.APIResponse;
 import com.chris.cmarket.Product.Dto.ProductDTO;
@@ -37,7 +36,7 @@ public class ProductController {
                     .body(APIResponse.failed(bindingResult.getAllErrors()));
         }
 
-        Page<ProductDTO> products = this.productService.getProducts(request);
+        CustomPageImplDto<ProductDTO> products = this.productService.getProducts(request);
 
         if (products.isEmpty()) {
             return ResponseEntity.status(404)
