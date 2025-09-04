@@ -151,7 +151,7 @@ public class ProductAPITest {
                 assertTrue(product.getPrice().compareTo(getRequest.getMaxPrice()) <= 0); // price should be lesser equal than maxPrice
             }
             if (null != getRequest.getRarity()) {
-                assertEquals(getRequest.getRarity(), product.getIdRarity());
+                assertEquals(getRequest.getRarity(), product.getRarityId());
             }
             if (null != getRequest.getMerchants()) {
                 List<Long> productMerchantIds = product.getMerchants()

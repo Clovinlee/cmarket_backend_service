@@ -27,15 +27,14 @@ public class ProductDTO implements Serializable {
 
     private Long id;
     private String name;
-    private String slug;
     private String image;
     private String description;
     private BigDecimal price;
     private RarityDTO rarity;
     private List<MerchantDTO> merchants;
 
-    @JsonProperty("id_rarity")
-    private Long idRarity;
+    @JsonProperty("rarity_id")
+    private Long rarityId;
 
     public ProductDTO(ProductModel product) {
         this.id = product.getId();
@@ -44,7 +43,7 @@ public class ProductDTO implements Serializable {
         this.description = product.getDescription();
         this.price = product.getPrice();
         this.rarity = null;
-        this.idRarity = product.getIdRarity();
+        this.rarityId = product.getRarityId();
 
         if (Hibernate.isInitialized(product.getRarity())) {
             this.rarity = new RarityDTO(product.getRarity());

@@ -37,11 +37,11 @@ public class ProductModel {
     private String slug;
     private String description;
 
-    @Column(name = "id_rarity", updatable = false, insertable = false)
-    private Long idRarity;
+    @Column(name = "rarity_id", updatable = false, insertable = false)
+    private Long rarityId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_rarity")
+    @JoinColumn(name = "rarity_id")
     private RarityModel rarity;
 
     @Positive

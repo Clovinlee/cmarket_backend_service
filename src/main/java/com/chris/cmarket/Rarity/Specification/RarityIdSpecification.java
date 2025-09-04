@@ -9,14 +9,14 @@ public class RarityIdSpecification {
 
     /**
      * Builds a specification to filter by rarity ID using the default column name
-     * "idRarity".
+     * "rarityId".
      *
      * @param id  The rarity ID to match.
      * @param <T> The entity type.
      * @return The specification or null if ID is null.
      */
     public static <T> Specification<T> whereId(Long id) {
-        return whereId(id, "idRarity");
+        return whereId(id, "rarityId");
     }
 
     /**

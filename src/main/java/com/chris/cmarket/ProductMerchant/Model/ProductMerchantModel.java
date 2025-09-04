@@ -29,10 +29,10 @@ public class ProductMerchantModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_product", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private ProductModel product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_merchant", referencedColumnName = "id")
+    @JoinColumn(name = "merchant_id", referencedColumnName = "id")
     private MerchantModel merchant;
 }
