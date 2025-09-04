@@ -19,7 +19,7 @@ INSERT INTO rarities (id, name, level, color, deleted_at) VALUES
 -- =============================
 -- = INSERT PRODUCTS TABLE      
 -- =============================
-INSERT INTO `products` (id, name, description, price, id_rarity, image, slug) VALUES
+INSERT INTO `products` (id, name, description, price, rarity_id, image, slug) VALUES
 (1,'Torch','A simple torch to lighten your path, though it has limited uses',5.00,1,'https://png.pngtree.com/png-vector/20240322/ourmid/pngtree-torch-fire-on-stick-medieval-lamp-and-tool-png-image_12178957.png','torch'),
 (2,'Boots of Swiftness','Enable you to walk in stealth',109.00,2,'https://r2.easyimg.io/rl532krro/boots.png','boots-of-swiftness'),
 (3,'Necklace of Mana','Increase your mana capacity and regeneration',281.00,3,'https://r2.easyimg.io/st94uelvw/amulet.png','necklace-of-mana'),
@@ -34,7 +34,7 @@ INSERT INTO `products` (id, name, description, price, id_rarity, image, slug) VA
 -- =============================
 -- = INSERT PRODUCTS_MERCHANTS TABLE      
 -- =============================
-INSERT INTO `products_merchants` (id, id_product, id_merchant) VALUES
+INSERT INTO `products_merchants` (id, product_id, merchant_id) VALUES
 (1, 1, 1),
 (2, 1, 2),
 (3, 2, 2),
