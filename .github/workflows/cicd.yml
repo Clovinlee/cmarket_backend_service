@@ -2,9 +2,9 @@ name: CMarket CICD Pipeline
 
 on:
   push:
-    branches: [ "ci/github-action-setup" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "ci/github-action-setup" ]
+    branches: [ "master" ]
 
 jobs:
   build-and-publish:
