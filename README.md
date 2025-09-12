@@ -83,9 +83,9 @@ The project was built using these tech stacks:
 - **Redis Caching**
   - Simple Cache / Redis Cache (`spring.cache.type=simple/redis`)
   - Unit Test
+- **CICD** _(github actions)_
 
 **🚧 In progress**
-- **CICD** (_next_)
 - **Spring AOP**
 - **Admin & Permissions**
   - Create Items
