@@ -7,7 +7,7 @@ on:
     branches: [ "ci/github-action-setup" ]
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
