@@ -25,6 +25,12 @@ jobs:
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
+    
+    - name: Setup JWT RSA keys
+      run: |
+        mkdir -p src/main/resources/keys
+        echo "${{ secrets.JWT_PRIVATE_KEY }}" > src/main/resources/keys/jwt/private.key
+        echo "${{ secrets.JWT_PUBLIC_KEY }}" > src/main/resources/keys/jwt/public.pem
       
     - name: Run Spring Boot Test
       run: ./gradlew test
