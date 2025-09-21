@@ -1,0 +1,6 @@
+BEGIN;
+
+ALTER TABLE products
+    ADD COLUMN quantity INT NOT NULL DEFAULT 100;
+
+COMMIT;
