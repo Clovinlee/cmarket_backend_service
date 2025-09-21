@@ -18,7 +18,7 @@ import java.util.Map;
 @EnableCaching
 public class CacheConfig {
     @Bean
-    @Lazy
+    @ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis")
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory();
     }
