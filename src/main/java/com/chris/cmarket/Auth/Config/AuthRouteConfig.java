@@ -13,7 +13,6 @@ public class AuthRouteConfig implements RouteConfigInterface {
         http
                 .securityMatcher("/auth/**") // only apply to /auth endpoints
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/me").authenticated());
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll());
     }
 }

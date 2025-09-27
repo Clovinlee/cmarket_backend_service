@@ -35,10 +35,4 @@ public class AuthController {
 
         return ResponseEntity.ok(APIResponse.success(authJwtDto));
     }
-
-    @PostMapping("/me")
-    public String authMe(Principal principal) {
-        return "Welcome" + " " + principal.getName() + "! You are authenticated.";
-    }
-
 }
