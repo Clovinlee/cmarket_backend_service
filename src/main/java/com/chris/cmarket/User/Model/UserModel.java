@@ -1,5 +1,7 @@
 package com.chris.cmarket.User.Model;
 
+import com.chris.cmarket.Common.Contract.HasUuidModel;
+import com.chris.cmarket.Common.Listener.ModelUuidListener;
 import com.chris.cmarket.User.Dto.OAuthUserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.annotation.Nullable;
@@ -16,7 +18,8 @@ import java.util.UUID;
 @Data // Generates getters, setters, toString, equals, hashCode
 @NoArgsConstructor // Required by JPA
 @JsonIgnoreProperties({ "password" })
-public class UserModel {
+@EntityListeners({ModelUuidListener.class})
+public class UserModel implements HasUuidModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,9 +28,8 @@ public class UserModel {
 
     private String name;
 
-    @Setter(AccessLevel.NONE)
     @Column(nullable = false, unique = true, updatable = false)
-    private String uuid = UUID.randomUUID().toString();
+    private String uuid;
 
     @Column(unique = true)
     @Nullable
