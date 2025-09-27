@@ -66,7 +66,8 @@ The project was built using these tech stacks:
 **✅ Completed**
 - **Spring Environment**
   - Multi-profile environment
-- **Spring JPA**
+- **Spring JPA** 
+  - JPA Entity Listener (uuid)
 - **Spring Boot MVC (REST API)**
   - Localization
   - Rest Handler
@@ -87,7 +88,6 @@ The project was built using these tech stacks:
 - **CICD** _(github actions)_
 
 **🚧 In progress**
-- **JPA Entity Listener** - ***(WIP)***
 - **Order Functionality** - ***(WIP)***
   - **Microservice** approach for Order Service
   - Kafka Messenger
