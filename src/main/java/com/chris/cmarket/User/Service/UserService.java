@@ -52,6 +52,15 @@ public class UserService {
     }
 
     /**
+     *
+     * @param oAuthUserDTO oAuthUserDTO from oauth verification
+     * @return optional user model
+     */
+    public Optional<UserModel> getUserFromOAuth(OAuthUserDTO oAuthUserDTO) {
+        return userRepository.findByProviderAndProviderId(oAuthUserDTO.getProvider(), oAuthUserDTO.getProviderId());
+    }
+
+    /**
      * Retrieves a user by their email address.
      * OR fails
      *

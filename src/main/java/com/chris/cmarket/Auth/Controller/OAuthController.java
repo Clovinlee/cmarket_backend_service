@@ -36,7 +36,9 @@ public class OAuthController {
                 : githubOauthService.exchangeAccessToken(code);
 
         OAuthUserDTO oauthUserData = githubOauthService.fetchUserInfo(accessCode);
-        UserModel userData = userService.createUserFromOAuth(oauthUserData);
+        UserModel userData = userService.getUserFromOAuth(oauthUserData)
+                .orElseGet(() -> userService.createUserFromOAuth(oauthUserData));
+
 
         String accessToken = jwtService.generateJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
         String refreshToken = jwtService.generateRefreshJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
