@@ -19,7 +19,7 @@ public class JwtService {
     /**
      * Generate JWT Token
      *
-     * @param subject user email
+     * @param subject user uuid
      * @return user signed jwt token
      */
     public String generateJwtToken(String subject) {
@@ -38,7 +38,7 @@ public class JwtService {
     /**
      * Generate refresh JWT Token (longer expiry)
      *
-     * @param subject user email
+     * @param subject user uuid
      * @return user signed jwt token
      */
     public String generateRefreshJwtToken(String subject) {
@@ -56,7 +56,7 @@ public class JwtService {
 
     /**
      * @param expirySeconds expiry in seconds
-     * @param subject user email
+     * @param subject user uuid
      * @return JWT Token
      */
     private String buildJwtToken(int expirySeconds, String subject, String provider) {

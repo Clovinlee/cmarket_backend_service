@@ -41,8 +41,8 @@ public class AuthService {
             throw new BadCredentialsException("Bad Credentials");
         }
 
-        String accessToken = jwtService.generateJwtToken(userModel.getEmail());
-        String refreshToken = jwtService.generateRefreshJwtToken(userModel.getEmail());
+        String accessToken = jwtService.generateJwtToken(userModel.getUuid());
+        String refreshToken = jwtService.generateRefreshJwtToken(userModel.getUuid());
 
         return new AuthJwtDto(accessToken, refreshToken);
     }

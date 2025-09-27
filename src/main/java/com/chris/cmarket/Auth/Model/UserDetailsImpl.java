@@ -2,6 +2,7 @@ package com.chris.cmarket.Auth.Model;
 
 import com.chris.cmarket.User.Model.UserModel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,21 +11,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String uuid;
-    private final boolean enabled;
-
-    public UserDetailsImpl(UserModel user) {
-        this(user.getUuid(), true);
-    }
+    private final UserModel user;
 
     @Override
     public String getUsername() {
-        return uuid;
+        return this.user.getUuid();
     }
 
     @Override
@@ -34,7 +31,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return null != this.user;
     }
 
     @Override
