@@ -77,6 +77,7 @@ The project was built using these tech stacks:
   - JWT Auth
 - **OAuth2 Social Login**
   - Github OAuth w/ PKCE
+  - Integration with current existing JWT (OAuth Login / Register)
 - **Dockerization**
   - Docker File
   - Docker Compose
@@ -86,11 +87,16 @@ The project was built using these tech stacks:
 - **CICD** _(github actions)_
 
 **🚧 In progress**
+- **JPA Entity Listener** - ***(WIP)***
+- **Order Functionality** - ***(WIP)***
+  - **Microservice** approach for Order Service
+  - Kafka Messenger
 - **Spring AOP**
 - **Admin & Permissions**
   - Create Items
   - File Upload Support
 - **API Hosting**
+- Open API (_Swagger_)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -239,6 +245,11 @@ spring.jpa.hibernate.ddl-auto=update
 spring.datasource.url=jdbc:mysql://localhost:3306/cmarket
 spring.datasource.username=root
 spring.datasource.password=root
+```
+
+- Additional `properties` import for Github OAuth _(Optional)_
+```properties
+spring.config.import=optional:classpath:configs/auth/github.properties
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
