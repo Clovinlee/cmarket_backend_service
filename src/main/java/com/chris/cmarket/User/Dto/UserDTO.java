@@ -12,6 +12,10 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class UserDTO {
+    Long id;
+
+    String uuid;
+
     @NotBlank
     private String name;
 
@@ -26,5 +30,8 @@ public class UserDTO {
 
     public UserDTO(UserModel user) {
         this(user.getName(), user.getEmail());
+
+        this.id = user.getId();
+        this.uuid = user.getUuid();
     }
 }
