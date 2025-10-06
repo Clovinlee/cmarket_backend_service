@@ -40,10 +40,10 @@ public class SecurityConfig {
 
         this.routeConfig.initializeRoutes(http);
 
-        http.securityMatcher("/**") // catch-all for other paths
+        http
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest()
-                        .permitAll())
+                        .authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt ->

@@ -6,7 +6,7 @@ import com.chris.cmarket.Merchant.Service.MerchantService;
 import com.chris.cmarket.Rarity.Dto.RarityDTO;
 import com.chris.cmarket.Rarity.Service.RarityService;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/filters") // base path for all filters
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class FilterController {
 
     private final RarityService rarityService;

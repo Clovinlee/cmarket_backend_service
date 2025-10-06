@@ -12,7 +12,6 @@ public class DevAuthRouteConfig implements RouteConfigInterface {
     @Override
     public void configureRoute(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/dev/auth/**") // only apply to /dev/auth endpoints
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/dev/auth/github").permitAll());
     }
