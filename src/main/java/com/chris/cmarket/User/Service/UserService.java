@@ -5,12 +5,15 @@ import com.chris.cmarket.Auth.Exception.OAuthUserAlreadyExistException;
 import com.chris.cmarket.Common.Exception.NotFoundException;
 import com.chris.cmarket.User.Dto.CreateUserDTO;
 import com.chris.cmarket.User.Dto.OAuthUserDTO;
+import com.chris.cmarket.User.Dto.UserDTO;
 import com.chris.cmarket.User.Model.UserModel;
 import com.chris.cmarket.User.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -90,5 +93,17 @@ public class UserService {
      */
     public Optional<UserModel> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * Convert user model to claims (jwt)
+     *
+     * @param user auth user
+     * @return map of user claims
+     */
+    public Map<String, Object> modelToClaims(UserModel user) {
+        UserDTO userDto = new UserDTO(user);
+
+        return userDto.toClaims();
     }
 }

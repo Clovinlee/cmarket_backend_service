@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @AllArgsConstructor
 public class AuthService {
@@ -41,7 +43,9 @@ public class AuthService {
             throw new BadCredentialsException("Bad Credentials");
         }
 
-        String accessToken = jwtService.generateJwtToken(userModel.getUuid());
+        Map<String, Object> jwtUserClaims = userService.modelToClaims(userModel);
+
+        String accessToken = jwtService.generateJwtToken(userModel.getUuid(), jwtUserClaims);
         String refreshToken = jwtService.generateRefreshJwtToken(userModel.getUuid());
 
         return new AuthJwtDto(accessToken, refreshToken);

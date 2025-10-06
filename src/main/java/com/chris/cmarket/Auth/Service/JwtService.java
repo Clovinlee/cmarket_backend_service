@@ -8,12 +8,12 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
     private final JwtProperties jwtProperties;
-
     private final JwtEncoder jwtEncoder;
 
     /**
@@ -23,16 +23,41 @@ public class JwtService {
      * @return user signed jwt token
      */
     public String generateJwtToken(String subject) {
-        return buildJwtToken(jwtProperties.getExpiryTimeSeconds(), subject, "auth");
+        return generateJwtToken(subject, "auth", null);
     }
 
     /**
+     * Generate JWT Token
+     *
+     * @param subject user uuid
+     * @param mapClaims additional claims to be included
+     * @return user signed jwt token
+     */
+    public String generateJwtToken(String subject,  Map<String, Object> mapClaims) {
+        return generateJwtToken(subject, "auth", mapClaims);
+    }
+
+    /**
+     * Generate JWT Token
+     *
      * @param subject  user uuid
      * @param provider auth provider to be provided. Default is auth
      * @return user signed jwt token
      */
     public String generateJwtToken(String subject, String provider) {
-        return buildJwtToken(jwtProperties.getExpiryTimeSeconds(), subject, provider);
+        return generateJwtToken(subject, provider, null);
+    }
+
+    /**
+     * Generate JWT Token
+     *
+     * @param subject   user uuid
+     * @param provider  auth provider to be provided. Default is auth
+     * @param mapClaims additional claims to be included
+     * @return user signed jwt token
+     */
+    public String generateJwtToken(String subject, String provider, Map<String, Object> mapClaims) {
+        return buildJwtToken(jwtProperties.getExpiryTimeSeconds(), subject, provider, mapClaims);
     }
 
     /**
@@ -42,24 +67,39 @@ public class JwtService {
      * @return user signed jwt token
      */
     public String generateRefreshJwtToken(String subject) {
-        return buildJwtToken(jwtProperties.getRefreshExpiryTimeSeconds(), subject, "auth");
+        return generateRefreshJwtToken(subject, "auth", null);
     }
 
     /**
+     * Generate refresh JWT Token (longer expiry)
+     *
      * @param subject  user uuid
      * @param provider auth provider to be provided. Default is auth
      * @return user signed jwt token
      */
     public String generateRefreshJwtToken(String subject, String provider) {
-        return buildJwtToken(jwtProperties.getRefreshExpiryTimeSeconds(), subject, provider);
+        return generateRefreshJwtToken(subject, provider, null);
+    }
+
+    /**
+     * Generate refresh JWT Token (longer expiry)
+     *
+     * @param subject   user uuid
+     * @param provider  auth provider to be provided. Default is auth
+     * @param mapClaims additional claims to be included
+     * @return user signed jwt token
+     */
+    public String generateRefreshJwtToken(String subject, String provider, Map<String, Object> mapClaims) {
+        return buildJwtToken(jwtProperties.getRefreshExpiryTimeSeconds(), subject, provider, mapClaims);
     }
 
     /**
      * @param expirySeconds expiry in seconds
-     * @param subject user uuid
+     * @param subject       user uuid
+     * @param mapClaims     mapped claims
      * @return JWT Token
      */
-    private String buildJwtToken(int expirySeconds, String subject, String provider) {
+    private String buildJwtToken(int expirySeconds, String subject, String provider, Map<String, Object> mapClaims) {
         Instant now = Instant.now();
         Instant expiry = now.plusSeconds(expirySeconds);
 
@@ -67,6 +107,11 @@ public class JwtService {
                 .issuedAt(now)
                 .subject(subject)
                 .claim("provider", provider)
+                .claims(c -> {
+                    if (mapClaims != null) {
+                        c.putAll(mapClaims);
+                    }
+                })
                 .expiresAt(expiry)
                 .build();
 

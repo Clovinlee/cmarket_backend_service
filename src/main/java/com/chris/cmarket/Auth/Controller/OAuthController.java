@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @ConditionalOnBean(OAuthServiceInterface.class)
 @RestController
 @RequestMapping("/oauth")
@@ -39,8 +41,8 @@ public class OAuthController {
         UserModel userData = userService.getUserFromOAuth(oauthUserData)
                 .orElseGet(() -> userService.createUserFromOAuth(oauthUserData));
 
-
-        String accessToken = jwtService.generateJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
+        Map<String, Object> jwtUserClaims = userService.modelToClaims(userData);
+        String accessToken = jwtService.generateJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId(), jwtUserClaims);
         String refreshToken = jwtService.generateRefreshJwtToken(userData.getUuid(), OAuthProviderEnum.GITHUB.getRegistrationId());
 
         return new AuthJwtDto(accessToken, refreshToken);

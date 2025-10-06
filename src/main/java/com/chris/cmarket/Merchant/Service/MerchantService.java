@@ -3,6 +3,7 @@ package com.chris.cmarket.Merchant.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.chris.cmarket.Merchant.Dto.MerchantDTO;
@@ -10,6 +11,7 @@ import com.chris.cmarket.Merchant.Model.MerchantModel;
 import com.chris.cmarket.Merchant.Repository.MerchantRepository;
 
 @Service
+@AllArgsConstructor
 public class MerchantService {
 
     private MerchantRepository merchantRepository;

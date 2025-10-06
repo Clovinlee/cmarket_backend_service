@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @ToString
 @NoArgsConstructor
@@ -33,5 +36,18 @@ public class UserDTO {
 
         this.id = user.getId();
         this.uuid = user.getUuid();
+    }
+
+    /**
+     * User for JWT Claims map
+     *
+     * @return user DTO map
+     */
+    public Map<String, Object> toClaims() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.id);
+        map.put("name", this.name);
+
+        return map;
     }
 }
