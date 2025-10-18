@@ -36,6 +36,7 @@ public class ProductModel {
     private String image;
     private String slug;
     private String description;
+    private Integer quantity;
 
     @Column(name = "rarity_id", updatable = false, insertable = false)
     private Long rarityId;
