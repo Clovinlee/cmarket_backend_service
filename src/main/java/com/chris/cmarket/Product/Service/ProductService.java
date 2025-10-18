@@ -2,10 +2,12 @@ package com.chris.cmarket.Product.Service;
 
 import com.chris.cmarket.Common.Dto.CustomPageImplDto;
 import com.chris.cmarket.Common.Exception.NotFoundException;
+import com.chris.cmarket.Common.Response.APIResponse;
 import com.chris.cmarket.Common.Specification.NameSpecification;
 import com.chris.cmarket.Common.Specification.PriceSpecification;
 import com.chris.cmarket.Common.Specification.SpecificationBuilder;
 import com.chris.cmarket.Common.Specification.WithRelationSpecification;
+import com.chris.cmarket.Order.Client.OrderClient;
 import com.chris.cmarket.Order.Event.PlaceOrderEvent;
 import com.chris.cmarket.Product.Dto.ProductDTO;
 import com.chris.cmarket.Product.Exception.StockNotEnoughException;
@@ -35,6 +37,7 @@ public class ProductService {
 
     private ProductRepository productRepository;
     private KafkaTemplate<String, PlaceOrderEvent> kafkaTemplate;
+    private OrderClient orderClient;
 
     /**
      * Retrieves a product by its slug.
@@ -90,12 +93,23 @@ public class ProductService {
     }
 
     @Transactional
-    public void placeOrder(String slug, int quantity, UserModel user) {
+    public void placeOrder(String slug, int quantity, UserModel user, String jwtToken) {
+        String orderUuid;
+
+        try {
+            APIResponse<String> orderUuidResponse = orderClient.getOrderUuid(jwtToken);
+            orderUuid = orderUuidResponse.getData();
+        } catch (Throwable th) {
+            log.error("Error fetching order UUID: {}", th.getMessage(), th);
+
+            throw th;
+        }
+
         ProductModel product = this.productRepository.findBySlugForUpdate(slug).orElseThrow(
                 () -> new NotFoundException("Product " + slug + " not found"));
         this.deduceStock(product, quantity);
 
-        PlaceOrderEvent placeOrderEvent = new PlaceOrderEvent(slug, quantity, product.getId(), product.getPrice(), user.getId());
+        PlaceOrderEvent placeOrderEvent = new PlaceOrderEvent(slug, quantity, product.getId(), product.getPrice(), user.getId(), orderUuid);
 
         kafkaTemplate.send(PlaceOrderEvent.TOPIC_NAME, placeOrderEvent);
         log.info("Order event sent to kafka: {}", placeOrderEvent);

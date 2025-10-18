@@ -31,4 +31,6 @@ public class PlaceOrderEvent {
 
     @JsonProperty("user_id")
     private Long userId;
+
+    private String uuid;
 }

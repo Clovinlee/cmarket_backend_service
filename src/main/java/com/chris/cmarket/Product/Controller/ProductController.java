@@ -58,8 +58,9 @@ public class ProductController {
     public void productOrder(
             @PathVariable String slug,
             @Valid @RequestBody OrderProductRequest orderProductRequest,
-            @AuthenticationPrincipal(expression = "user") UserModel user
+            @AuthenticationPrincipal(expression = "user") UserModel user,
+            @RequestHeader("Authorization") String jwtToken
     ) {
-        productService.placeOrder(slug, orderProductRequest.getQuantity(), user);
+        this.productService.placeOrder(slug, orderProductRequest.getQuantity(), user, jwtToken);
     }
 }
