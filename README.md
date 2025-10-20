@@ -10,6 +10,7 @@
   <img src="https://img.shields.io/badge/Spring-6.1.6-grey?labelColor=6DB33F" alt="Spring Framework Badge" />
   <img src="https://img.shields.io/badge/MySQL-8.4-grey?logo=mysql&logoColor=white&labelColor=4479A1" alt="MySQL 8.4" />
   <img src="https://img.shields.io/badge/JPA-59666C?logo=hibernate&logoColor=fff" alt="JPA (Hibernate)" />
+  <img src="https://img.shields.io/badge/Kafka-7.5-grey?style=flat&logo=java&logoColor=white&labelColor=white" alt="Kafka 7.5" />
   <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff" alt="Docker" />
 </div>
 
@@ -60,13 +61,16 @@ The project was built using these tech stacks:
 * Docker
 * MySQL 8.4
 * Redis 7.4
+* Kafka 7.5
+  * Kafka UI
+  * Zookeeper 7.5.0
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Features
 **✅ Completed**
 - **Spring Environment**
   - Multi-profile environment
-- **Spring JPA** 
+- **Spring JPA**
   - JPA Entity Listener (uuid)
 - **Spring Boot MVC (REST API)**
   - Localization
@@ -86,11 +90,11 @@ The project was built using these tech stacks:
   - Simple Cache / Redis Cache (`spring.cache.type=simple/redis`)
   - Unit Test
 - **CICD** _(github actions)_
+- **Order Functionality**
+  - **Microservice** approach for Order Service ([source repo](https://github.com/Clovinlee/cmarket_order_service))
+  - Kafka Messenger
 
 **🚧 In progress**
-- **Order Functionality** - ***(WIP)***
-  - **Microservice** approach for Order Service
-  - Kafka Messenger
 - **Spring AOP**
 - **Admin & Permissions**
   - Create Items
@@ -136,36 +140,36 @@ Domain/
 └── ...
 </pre>
 
-  <small>Every route config must implement the `RouteConfigInterface` and use `@Component` annotation for its configuration to be loaded and collected into an array in the `RouteConfig` configuration class
-  </small> 
+<small>Every route config must implement the `RouteConfigInterface` and use `@Component` annotation for its configuration to be loaded and collected into an array in the `RouteConfig` configuration class
+</small>
   ```java
   // RouteConfig
 
-  private final RouteConfigInterface[] routeConfigs;
+private final RouteConfigInterface[] routeConfigs;
 
-  public void initializeRoutes(HttpSecurity http) throws Exception {
-    for (RouteConfigInterface routeConfig : routeConfigs) {
-      routeConfig.configureRoute(http);
-    }
+public void initializeRoutes(HttpSecurity http) throws Exception {
+  for (RouteConfigInterface routeConfig : routeConfigs) {
+    routeConfig.configureRoute(http);
   }
+}
   ```
-  <small>_**(For detailed docs, refer to the diagram below / Javadoc inside the mentioned class)**_
-  </small>
-  
-  <small>The `RouteConfig` then is injected into the `SecurityConfig`, and it invokes the `RouteConfig.initializeRoutes(..)` method to initialize all the routes specified. As an addition, the `RouteConfig` will also configure the default behavior to other route that are not configured as it follows the _**Most Specific to Least Specific rule**_</small>
+<small>_**(For detailed docs, refer to the diagram below / Javadoc inside the mentioned class)**_
+</small>
+
+<small>The `RouteConfig` then is injected into the `SecurityConfig`, and it invokes the `RouteConfig.initializeRoutes(..)` method to initialize all the routes specified. As an addition, the `RouteConfig` will also configure the default behavior to other route that are not configured as it follows the _**Most Specific to Least Specific rule**_</small>
 
   <img src="https://i.imgur.com/EX96isX.png" alt="CMarket Spring Boot Route Concept">
-  
+
 </details>
 <br>
 <details>
   <summary>
     <strong>🛠️ Specification Builder | <i>Query Builder</i></strong>
   </summary>
-  
-  <small>The specification builder follows the **builder pattern** to create specifications for querying data from the repository. It encapsulates complexity by keeping all the given specifications and reduce the verbosity by handling null values and chaining them together.
-  </small>
-  
+
+<small>The specification builder follows the **builder pattern** to create specifications for querying data from the repository. It encapsulates complexity by keeping all the given specifications and reduce the verbosity by handling null values and chaining them together.
+</small>
+
   <img src="https://i.imgur.com/apYYQuq.png" alt="CMarket Spring Boot Specification Builder Concept">
 </details>
 <br>
@@ -196,7 +200,18 @@ Domain/
   <br/><br/>
 <img src="https://i.imgur.com/GMZjn9f.png" alt="CMarket Spring Boot OAuth Concept">
 </details>
+<br>
+<details>
+  <summary><strong>✉️ Kafka Event Broker</strong></summary>
 
+  <small> The order flow uses kafka as its message broker. Backend service will act as producer to send order event to be consumed by order service. As for now, the replication & consumer group will be limited to 1 in order to keep the whole process simple</small> <br/>
+
+  <small> We use <code>PlaceOrderEvent</code> which is an order DTO to be sent into <code>place_order</code> topic. However, first we will need to request a unique identifier such as UUID from the <code>OrderService</code>. This is done to ensure idempotency in order processing from the <code>OrderService</code> microservice.</small>
+
+  <small>Upon consuming a message in <code>place_order</code> topic, the consumer offset will be adjusted automatically. In order to handle failure during consuming a message, the failed message will be sent to <code>place_order.DLT</code> using **Dead Letter Queue** concept. The messages in <code>.DLT</code> then can be processed in such way in the future.</small><br/><br/>
+
+<img src="https://i.ibb.co.com/TjyW7BY/cmarket-order.png" alt="CMarket Spring Boot Kafka Event Broker Concept">
+</details>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
@@ -259,7 +274,7 @@ spring.config.import=optional:classpath:configs/auth/github.properties
 - Run `openssl genpkey -algorithm RSA -out src/main/resources/keys/jwt/private.key -pkeyopt rsa_keygen_bits:2048` to generate the private key in `classpath/keys/jwt`
 - Run `openssl rsa -pubout -in src/main/resources/keys/jwt/private.key -out src/main/resources/keys/jwt/public.pem` to generate the public key in same folder
 - Run `./gradlew bootJar` to build the executable `.jar` file
-- Run `docker compose up` (_if with docker_) 
+- Run `docker compose up` (_if with docker_)
 - Or execute the generated `.jar` generated in `build/libs/cmarket-1.0.jar`(_without docker_)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
